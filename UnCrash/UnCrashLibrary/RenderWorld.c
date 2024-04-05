@@ -22,7 +22,7 @@ uint16_t GetRandomNumber() {
 //
 //	Creates game world blocks to be rendered
 //
-void GetWorldSettings(WorldBlock *Block) {
+void SetWorldBlock(WorldBlock *Block) {
 
 	uint16_t RandNum = GetRandomNumber();
 

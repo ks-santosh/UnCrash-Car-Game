@@ -18,4 +18,4 @@ uint16_t GetRandomNumber();
 //
 //	Creates game world blocks to be rendered
 //	- no returns as the value is directly written to address
-void GetWorldSettings(WorldBlock *Block);
+void SetWorldBlock(WorldBlock *Block);
