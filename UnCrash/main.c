@@ -53,6 +53,12 @@ __irq void pushbuttonISR(HPSIRQSource interruptID, void* param, bool* handled) {
 // =============
 int main(void) {
     //Main Run Loop
+	// Keep track of all our device drivers in a friendly structure
+	static AppDrivers_t drivers = {0};
+
+	// Initialise drivers
+	FPGA_PIO_initialise(LSC_BASE_KEYS, LSC_CONFIG_KEYS, &drivers.keys);
+	FPGA_PIO_initialise(LSC_BASE_7SEG_0to3, LSC_CONFIG_7SEG, &drivers.hex0to3);
     while (1) {
         HPS_ResetWatchdog(); //Just reset the watchdog.
     }
