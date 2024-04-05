@@ -27,7 +27,12 @@ void SetWorldBlock(WorldBlock *Block) {
 	uint16_t RandNum = GetRandomNumber();
 
 	// Get the obstacle placement type : bits 0,1,2
-	Block->ObsPlaceType = (RandNum & 7u);
+	uint8_t ObsPlaceType = (RandNum & 7u);
+	if(ObsPlaceType == 7) {
+		ObsPlaceType = 5;
+	}
+	Block->ObsPlaceType = ObsPlaceType;
+
 	// Get the coin placement type : bits 3,4,5
 	Block->CoinPlaceType = ((RandNum >> 3) & 7u);
 	// Get the first Obstacle type : bits 6,7,8
