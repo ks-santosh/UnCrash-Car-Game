@@ -103,7 +103,4 @@ int main(void) {
 		    	            FPGA_PIO_setOutput(drivers.hex0to3, hexVal, UINT32_MAX);
 		    	        }
 		    	    }
-    while (1) {
-        HPS_ResetWatchdog(); //Just reset the watchdog.
-    }
 }
