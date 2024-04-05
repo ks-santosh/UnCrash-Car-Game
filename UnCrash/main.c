@@ -29,6 +29,24 @@ typedef struct {
     volatile unsigned int keyPressed;
 } AppDrivers_t;
 
+//Key Released Interrupt Displays Last Button Released
+__irq void pushbuttonISR(HPSIRQSource interruptID, void* param, bool* handled) {
+    //Return failure if context is NULL pointer.
+    if (param == NULL) return;
+    //Cast param to expected type
+    AppDrivers_t* pDrivers = (AppDrivers_t*)param;
+    //Read the Push-button interrupt register, and clear the flags
+    unsigned int press;
+    FPGA_PIO_getInterruptFlags(pDrivers->keys, &press, 0xF, true);
+    //Update list of key presses received
+    // - this is an example of how you can return values from an interrupt
+    //   routine.
+    pDrivers->keyPressed |= press;
+    //IRQ Handled
+    *handled = true;
+    //Reset watchdog.
+    HPS_ResetWatchdog();
+}
 
 //
 // Main Function
