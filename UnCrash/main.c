@@ -13,9 +13,22 @@
 
 
 #include "DE1SoC_Addresses/DE1SoC_Addresses.h"
-#include "DE1SoC_LT24/DE1SoC_LT24.h"
+#include "DE1SoC_IRQ/DE1SoC_IRQ.h"
+#include "HPS_GPIO/HPS_GPIO.h"
+#include "FPGA_PIO/FPGA_PIO.h"
 #include "HPS_Watchdog/HPS_Watchdog.h"
 #include "HPS_usleep/HPS_usleep.h"
+
+
+typedef struct {
+    // Driver contexts:
+    PFPGAPIOCtx_t hex0to3; // using 7 seg driver to test
+    PFPGAPIOCtx_t keys; // using buttons driver for creating interrupts
+    PHPSGPIOCtx_t hpsIo; // using IO gpio pins
+    // Value returned from interrupt:
+    volatile unsigned int keyPressed;
+} AppDrivers_t;
+
 
 //
 // Main Function
