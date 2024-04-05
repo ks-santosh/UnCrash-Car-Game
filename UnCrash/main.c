@@ -71,6 +71,38 @@ int main(void) {
 		    // Configure Push Buttons to interrupt on press
 		    FPGA_PIO_setInterruptEnable(drivers.keys, 0xF, 0xF); // Enable interrupts for all four KEYs
 		    HPS_ResetWatchdog();
+		    //Finally we enable the interrupts
+		    HPS_IRQ_globalEnable(true);
+
+		    	    //Do nothing in the run loop but reset the watchdog.
+		    	    //Notice how the light blinks anyway.
+		    	    while(1) {
+		    	        //With interrupts enabled, we can also save power by
+		    	        //putting the processor to sleep, until an interrupt
+		    	        //occurs.
+		    	        //You don't have to do this if you have other things
+		    	        //to do in the main run loop.
+		    	        __asm("WFI");
+		    	        //Reset watchdog.
+		    	        HPS_ResetWatchdog();
+		    	        //Check if any keys were pressed. We temporarily disable
+		    	        //interrupts while we are reading the shared data value
+		    	        HpsErr_t wasDisabled = HPS_IRQ_globalEnable(false);
+		    	        unsigned int keyPressed = drivers.keyPressed; // Read bit map of pressed keys
+		    	        drivers.keyPressed = 0;                       // Clear list for next time.
+		    	        HPS_IRQ_globalEnable(wasDisabled != ERR_SKIPPED);
+		    	        //Now do something to handle the key presses
+		    	        if (keyPressed) {
+		    	            unsigned int hexVal;
+		    	            unsigned char* hexValPtr = (unsigned char*)&hexVal;
+		    	            //Prepare to display 1 or 0 on 7-seg corresponding to whichever keys are pressed.
+		    	            for (unsigned int i = 0; i < 4; i++) {
+		    	                hexValPtr[i] = (keyPressed & (1 << i)) ? 0x06 : 0x3F;
+		    	            }
+		    	            // Display on 7-seg LEDs
+		    	            FPGA_PIO_setOutput(drivers.hex0to3, hexVal, UINT32_MAX);
+		    	        }
+		    	    }
     while (1) {
         HPS_ResetWatchdog(); //Just reset the watchdog.
     }
