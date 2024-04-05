@@ -59,6 +59,18 @@ int main(void) {
 	// Initialise drivers
 	FPGA_PIO_initialise(LSC_BASE_KEYS, LSC_CONFIG_KEYS, &drivers.keys);
 	FPGA_PIO_initialise(LSC_BASE_7SEG_0to3, LSC_CONFIG_7SEG, &drivers.hex0to3);
+	//Set HPS LED low
+		    HPS_GPIO_setOutput(drivers.hpsIo, 0, ARM_GPIO_HPS_LED);
+
+		    //Initialise IRQs
+		    HPS_IRQ_initialise(false,NULL);
+		    HPS_ResetWatchdog();
+
+		    // Register interrupt handler for keys
+		    HPS_IRQ_registerHandler(IRQ_LSC_KEYS, pushbuttonISR, &drivers);
+		    // Configure Push Buttons to interrupt on press
+		    FPGA_PIO_setInterruptEnable(drivers.keys, 0xF, 0xF); // Enable interrupts for all four KEYs
+		    HPS_ResetWatchdog();
     while (1) {
         HPS_ResetWatchdog(); //Just reset the watchdog.
     }
