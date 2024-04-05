@@ -4,8 +4,10 @@
 typedef struct WorldBlock {
 	uint8_t ObsPlaceType;	// Obstacle placement type
 	uint8_t CoinPlaceType;	// Coin placement type
-	uint8_t ObsType1;
-	uint8_t ObsType2;
+	uint8_t ObsType1;		// select obstacle 1
+	uint8_t ObsType2;		// select obstacle 2
+	uint8_t Start;			// starting row to render from
+	uint8_t End;			// end row to render till
 
 } WorldBlock;
 

@@ -34,5 +34,7 @@ void SetWorldBlock(WorldBlock *Block) {
 	Block->ObsType1 = ((RandNum >> 6) & 7u);
 	// Get the second Obstacle type : bits 9,10,1
 	Block->ObsType2 = ((RandNum >> 9) & 7u);
-
+	// Set start and end rows to be rendered between;
+	Block->Start = 0;
+	Block->End = 63;
 }
