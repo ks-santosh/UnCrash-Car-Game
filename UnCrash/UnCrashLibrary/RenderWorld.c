@@ -18,3 +18,21 @@ uint16_t GetRandomNumber() {
 
 	return RandNum;
 }
+
+//
+//	Creates game world blocks to be rendered
+//
+void GetWorldSettings(WorldBlock *Block) {
+
+	uint16_t RandNum = GetRandomNumber();
+
+	// Get the obstacle placement type : bits 0,1,2
+	Block->ObsPlaceType = (RandNum & 7u);
+	// Get the coin placement type : bits 3,4,5
+	Block->CoinPlaceType = ((RandNum >> 3) & 7u);
+	// Get the first Obstacle type : bits 6,7,8
+	Block->ObsType1 = ((RandNum >> 6) & 7u);
+	// Get the second Obstacle type : bits 9,10,1
+	Block->ObsType2 = ((RandNum >> 9) & 7u);
+
+}
