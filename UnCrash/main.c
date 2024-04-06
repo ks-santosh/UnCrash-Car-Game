@@ -17,4 +17,8 @@ void exitOnFail(signed int status, signed int successStatus) {
 int main(void) {
     CarPosition carPos = {50, 50}; // Initial position of the car
     LT24Display display = {{0}, 120, 160}; // Initialize LT24 display context
+
+    // Initialize the LCD Display
+    exitOnFail(initialize_display(&display), ERR_SUCCESS);
+    HPS_ResetWatchdog();
 }
