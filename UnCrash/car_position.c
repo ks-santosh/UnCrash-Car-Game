@@ -1,9 +1,8 @@
-//car_position.c file
+// car_position.c file
 #include "car_position.h"
 
 // Peripheral base addresses.
 volatile unsigned int *key_ptr = (unsigned int *)0xFF200050;
-
 
 // Store the state of the keys last time we checked.
 // This allows us to determine when a key is pressed, then released.
@@ -35,7 +34,7 @@ void handle_car_movement(CarPosition *carPos, LT24Display *display) {
         (carPos->x) -= 10; // You may adjust the value as needed for desired movement speed
     }
     // Display the updated car position
-    LT24_display_image(display->lt24, Test, display->width, display->height, carPos->x, carPos->y);
+    LT24_display_image(&(display->lt24), Test, display->width, display->height, carPos->x, carPos->y);
 }
 
 int initialize_display(LT24Display *display) {
@@ -43,5 +42,5 @@ int initialize_display(LT24Display *display) {
 }
 
 int display_image(LT24Display *display, const unsigned short *image, int x, int y) {
-    return LT24_display_image(display->lt24, image, display->width, display->height, x, y);
+    return LT24_display_image(&(display->lt24), image, display->width, display->height, x, y);
 }

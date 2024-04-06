@@ -1,6 +1,6 @@
-/* 
+/*
  * Test.h
- * 
+ *
  * An image of the DE1-SoC Board.
  */
 
