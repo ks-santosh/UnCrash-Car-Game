@@ -25,4 +25,12 @@ int main(void) {
     // Display the image
     exitOnFail(display_image(&display, Test, carPos.x, carPos.y), ERR_SUCCESS);
 
+    // Main Run Loop
+    while (1) {
+        // Handle car movement based on key presses
+        handle_car_movement(&carPos, &display);
+        
+        HPS_ResetWatchdog(); // Just reset the watchdog
+    }
+
 }
