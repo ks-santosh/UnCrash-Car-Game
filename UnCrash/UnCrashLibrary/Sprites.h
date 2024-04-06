@@ -7,7 +7,8 @@
 #ifndef SPRITES_H_
 #define SPRITES_H_
 
-extern const unsigned short Sidewalk[1024];
+extern const unsigned short SidewalkLeft[1536];
+extern const unsigned short SidewalkRight[1536];
 
 extern const unsigned short Obstacle1[4096];
 extern const unsigned short Obstacle2[4096];
