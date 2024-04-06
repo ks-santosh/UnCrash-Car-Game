@@ -16,3 +16,21 @@ typedef struct {
     int width;
     int height;
 } LT24Display;
+
+// Store the state of the keys last time we checked.
+// This allows us to determine when a key is pressed, then released.
+unsigned int key_last_state = 0;
+
+unsigned int getPressedKeys() {
+    // Store the current state of the keys.
+    unsigned int key_current_state = *key_ptr;
+
+    // If the key was down last cycle, and is up now, mark as pressed.
+    unsigned int keys_pressed = (~key_current_state) & (key_last_state);
+
+    // Save the key state for next time, so we can compare the next state to this.
+    key_last_state = key_current_state;
+
+    // Return result.
+    return keys_pressed;
+}
