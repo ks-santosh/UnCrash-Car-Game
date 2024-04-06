@@ -10,4 +10,9 @@ typedef struct {
     int y;
 } CarPosition;
 
-
+// Define a structure to represent LT24 display context
+typedef struct {
+    PLT24Ctx_t lt24;
+    int width;
+    int height;
+} LT24Display;
