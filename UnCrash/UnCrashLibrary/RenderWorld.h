@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "Sprites.h"
+#include "DE1SoC_LT24/DE1SoC_LT24.h"
 
 //
 // Sets the design and placement of game world's basic blocks
