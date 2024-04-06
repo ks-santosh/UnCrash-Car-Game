@@ -70,21 +70,6 @@ void RenderWorldBlock(WorldBlock *Block, PLT24Ctx_t lt24) {
 	uint16_t StartPx = Start * OB_SIDE;		// block start pixel value to render from
 	uint16_t BlHeight = End - Start + 1;	// block height in rows
 
-	// Render left and right sidewalk
-	static uint16_t SwOffsetY = 80;
-
-	if(SwOffsetY) {
-		LT24_copyFrameBuffer(lt24, &SidewalkLeft[(LT24_HEIGHT-SwOffsetY)*SW_WIDTH], 0, 0, SW_WIDTH, SwOffsetY);
-		LT24_copyFrameBuffer(lt24, &SidewalkRight[(LT24_HEIGHT-SwOffsetY)*SW_WIDTH], LT24_WIDTH - SW_WIDTH, 0, SW_WIDTH, SwOffsetY);
-	}
-	LT24_copyFrameBuffer(lt24, SidewalkLeft, 0, SwOffsetY, SW_WIDTH, LT24_HEIGHT - SwOffsetY);
-	LT24_copyFrameBuffer(lt24, SidewalkRight, LT24_WIDTH - SW_WIDTH, SwOffsetY, SW_WIDTH, LT24_HEIGHT - SwOffsetY);
-
-	SwOffsetY++;
-	if(SwOffsetY >= LT24_HEIGHT) {
-		SwOffsetY = 0;
-	}
-
 	// first block : bit 0
 	ObsX = SW_WIDTH;
 	if(ObsPlaceType & 1u) {
@@ -158,11 +143,27 @@ void ShiftWorldBlock(WorldBlock WBlocks[], uint8_t ShiftY) {
 //
 void RenderWorld(WorldBlock WBlocks[], PLT24Ctx_t lt24,  uint8_t ShiftY) {
 
+	// Render left and right sidewalk
+	static uint16_t SwOffsetY = 0;
 
+	if(SwOffsetY) {
+		LT24_copyFrameBuffer(lt24, &SidewalkLeft[(LT24_HEIGHT-SwOffsetY)*SW_WIDTH], 0, 0, SW_WIDTH, SwOffsetY);
+		LT24_copyFrameBuffer(lt24, &SidewalkRight[(LT24_HEIGHT-SwOffsetY)*SW_WIDTH], LT24_WIDTH - SW_WIDTH, 0, SW_WIDTH, SwOffsetY);
+	}
+	LT24_copyFrameBuffer(lt24, SidewalkLeft, 0, SwOffsetY, SW_WIDTH, LT24_HEIGHT - SwOffsetY);
+	LT24_copyFrameBuffer(lt24, SidewalkRight, LT24_WIDTH - SW_WIDTH, SwOffsetY, SW_WIDTH, LT24_HEIGHT - SwOffsetY);
+
+	SwOffsetY += ShiftY;
+	if(SwOffsetY >= LT24_HEIGHT) {
+		SwOffsetY = 0;
+	}
+
+	// Render obstacles and road
 	for(uint8_t i = 0; i < 6; i++)
 	{
 		RenderWorldBlock(&WBlocks[i], lt24);
 	}
 
+	// down shift the world
 	ShiftWorldBlock(WBlocks, ShiftY);
 }
