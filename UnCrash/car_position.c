@@ -49,3 +49,11 @@ void handle_car_movement(CarPosition *carPos, LT24Display *display) {
     // Display the updated car position
     LT24_display_image(display->lt24, Test, display->width, display->height, carPos->x, carPos->y);
 }
+
+int initialize_display(LT24Display *display) {
+    return LT24_initialize_display(&(display->lt24));
+}
+
+int display_image(LT24Display *display, const unsigned short *image, int x, int y) {
+    return LT24_display_image(display->lt24, image, display->width, display->height, x, y);
+}
