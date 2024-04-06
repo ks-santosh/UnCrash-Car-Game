@@ -13,3 +13,8 @@ void exitOnFail(signed int status, signed int successStatus) {
         exit((int)status); // Add breakpoint here to catch failure
     }
 }
+
+int main(void) {
+    CarPosition carPos = {50, 50}; // Initial position of the car
+    LT24Display display = {{0}, 120, 160}; // Initialize LT24 display context
+}
