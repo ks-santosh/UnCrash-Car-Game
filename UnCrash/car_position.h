@@ -15,12 +15,14 @@ typedef struct {
     PLT24Ctx_t lt24;
     int width;
     int height;
+    volatile unsigned char *gpio_base;
+    volatile unsigned char *lt24_base;
 } LT24Display;
 
 // Function prototypes
-int initialize_display(LT24Display *display);
+int initialize_display(LT24Display *display, volatile unsigned char *gpio_base, volatile unsigned char *lt24_base);
 int display_image(LT24Display *display, const unsigned short *image, int x, int y);
-void handle_car_movement(CarPosition *carPos, LT24Display *display);
+void handle_car_movement(CarPosition *carPos, LT24Display *display, const unsigned short *image);
 unsigned int getPressedKeys();
 
 #endif /* CAR_POSITION_H */

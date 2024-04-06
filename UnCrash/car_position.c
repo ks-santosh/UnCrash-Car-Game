@@ -1,8 +1,4 @@
-// car_position.c file
 #include "car_position.h"
-
-// Peripheral base addresses.
-volatile unsigned int *key_ptr = (unsigned int *)0xFF200050;
 
 // Store the state of the keys last time we checked.
 // This allows us to determine when a key is pressed, then released.
@@ -22,7 +18,7 @@ unsigned int getPressedKeys() {
     return keys_pressed;
 }
 
-void handle_car_movement(CarPosition *carPos, LT24Display *display) {
+void handle_car_movement(CarPosition *carPos, LT24Display *display, const unsigned short *image) {
     unsigned int keys_pressed = getPressedKeys();
 
     // Test if each key has been pressed in turn, carry out action if so.
@@ -34,10 +30,12 @@ void handle_car_movement(CarPosition *carPos, LT24Display *display) {
         (carPos->x) -= 10; // You may adjust the value as needed for desired movement speed
     }
     // Display the updated car position
-    LT24_display_image(&(display->lt24), Test, display->width, display->height, carPos->x, carPos->y);
+    LT24_display_image(&(display->lt24), image, display->width, display->height, carPos->x, carPos->y);
 }
 
-int initialize_display(LT24Display *display) {
+int initialize_display(LT24Display *display, volatile unsigned char *gpio_base, volatile unsigned char *lt24_base) {
+    display->gpio_base = gpio_base;
+    display->lt24_base = lt24_base;
     return LT24_initialize_display(&(display->lt24));
 }
 

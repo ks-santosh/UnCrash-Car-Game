@@ -16,7 +16,7 @@ int main(void) {
     LT24Display display = {{0}, 120, 160}; // Initialize LT24 display context
 
     // Initialize the LCD Display
-    exitOnFail(initialize_display(&display), ERR_SUCCESS);
+    exitOnFail(initialize_display(&display, (unsigned char*)0xFF200060, (unsigned char*)0xFF200080), ERR_SUCCESS);
     HPS_ResetWatchdog();
 
     // Display the image
@@ -25,7 +25,7 @@ int main(void) {
     // Main Run Loop
     while (1) {
         // Handle car movement based on key presses
-        handle_car_movement(&carPos, &display);
+        handle_car_movement(&carPos, &display, Test);
         
         HPS_ResetWatchdog(); // Just reset the watchdog
     }
