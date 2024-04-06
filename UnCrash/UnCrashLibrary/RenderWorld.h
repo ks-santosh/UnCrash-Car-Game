@@ -1,3 +1,10 @@
+#ifndef RENDERWORLD_H_
+#define RENDERWORLD_H_
+
+#include <stdint.h>
+#include <stdbool.h>
+#include "Sprites.h"
+
 //
 // Sets the design and placement of game world's basic blocks
 //
@@ -21,3 +28,10 @@ uint16_t GetRandomNumber();
 //	Creates game world blocks to be rendered
 //	- no returns as the value is directly written to address
 void SetWorldBlock(WorldBlock *Block);
+
+//
+// Renders the world on the LCD by placing world blocks
+//
+void RenderWorldBlock(WorldBlock *Block, PLT24Ctx_t ctx);
+
+#endif /* RENDERWORLD_H_ */
