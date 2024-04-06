@@ -56,8 +56,13 @@ void RenderWorldBlock(WorldBlock *Block, PLT24Ctx_t lt24) {
 	uint8_t ObsType1 = Block->ObsType1;
 	uint8_t ObsType2 = Block->ObsType2;
 	uint8_t ObsType3 = ObsType1 ^ ObsType2;
-	uint8_t StartPx = Block->Start;
-	uint8_t EndPx = Block->End;
+	uint8_t Start = Block->Start;
+	uint8_t End = Block->End;
+	uint16_t BlOffsetY = Block->OffsetY;
+
+	uint8_t ObsX; 							// Left-X value for obstacles
+	uint16_t StartPx = Start * OB_SIDE;		// block start pixel value to render from
+	uint16_t BlHeight = End - Start + 1;	// block height in rows
 
 	// Render left and right sidewalk
 	static uint16_t SwOffsetY = 80;
@@ -74,5 +79,31 @@ void RenderWorldBlock(WorldBlock *Block, PLT24Ctx_t lt24) {
 		SwOffsetY = 0;
 	}
 
+	// first block : bit 0
+	ObsX = SW_WIDTH;
+	if(ObsPlaceType & 1u) {
+		LT24_copyFrameBuffer(lt24, &Obstacles[ObsType1][StartPx], ObsX, BlOffsetY, OB_SIDE, BlHeight);
+	}
+	else {
+		LT24_copyFrameBuffer(lt24, &Road[StartPx], ObsX, BlOffsetY, OB_SIDE, BlHeight);
+	}
+
+	// middle block : bit 1
+	ObsX += OB_SIDE;
+	if((ObsPlaceType >> 1) & 1u) {
+		LT24_copyFrameBuffer(lt24, &Obstacles[ObsType2][StartPx], ObsX, BlOffsetY, OB_SIDE, BlHeight);
+	}
+	else {
+		LT24_copyFrameBuffer(lt24, &Road[StartPx], ObsX, BlOffsetY, OB_SIDE, BlHeight);
+	}
+
+	// end block : bit 2
+	ObsX += OB_SIDE;
+	if((ObsPlaceType >> 2) & 1u) {
+		LT24_copyFrameBuffer(lt24, &Obstacles[ObsType3][StartPx], ObsX, BlOffsetY, OB_SIDE, BlHeight);
+	}
+	else {
+		LT24_copyFrameBuffer(lt24, &Road[StartPx], ObsX, BlOffsetY, OB_SIDE, BlHeight);
+	}
 
 }

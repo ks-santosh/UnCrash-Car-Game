@@ -11,8 +11,7 @@
 #define SW_HEIGHT 320u
 
 // Obstacle Dimensions
-#define OB_WIDTH 64u
-#define OB_HEIGHT 64u
+#define OB_SIDE 64u
 
 //
 // Sets the design and placement of game world's basic blocks
@@ -24,6 +23,7 @@ typedef struct WorldBlock {
 	uint8_t ObsType2;		// select obstacle 2
 	uint8_t Start;			// starting row to render from
 	uint8_t End;			// end row to render till
+	uint16_t OffsetY;		// The y-axis point on LCD to draw from
 } WorldBlock;
 
 //
