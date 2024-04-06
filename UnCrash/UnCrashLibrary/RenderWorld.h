@@ -38,8 +38,18 @@ uint16_t GetRandomNumber();
 void SetWorldBlock(WorldBlock *Block);
 
 //
-// Renders the world on the LCD by placing world blocks
+// Renders the world block piece on the LCD
 //
 void RenderWorldBlock(WorldBlock *Block, PLT24Ctx_t ctx);
+
+//
+// Shifts the block position related parameters by given shift value
+//
+void ShiftWorldBlock(WorldBlock WBlocks[], uint8_t ShiftY);
+
+//
+// Renders the whole world on the LCD by placing world blocks
+//
+void RenderWorld(WorldBlock *Block, PLT24Ctx_t ctx, uint8_t ShiftY);
 
 #endif /* RENDERWORLD_H_ */
