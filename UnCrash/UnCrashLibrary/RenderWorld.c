@@ -51,29 +51,28 @@ void SetWorldBlock(WorldBlock *Block) {
 //
 void RenderWorldBlock(WorldBlock *Block, PLT24Ctx_t lt24) {
 
-
+	// Local variables
 	uint8_t ObsPlaceType= Block->ObsPlaceType;
 	uint8_t ObsType1 = Block->ObsType1;
 	uint8_t ObsType2 = Block->ObsType2;
 	uint8_t ObsType3 = ObsType1 ^ ObsType2;
-	uint8_t StartRow = Block->Start;
-	uint8_t EndRow = Block->End;
+	uint8_t StartPx = Block->Start;
+	uint8_t EndPx = Block->End;
 
-	// Animate left and right sidewalk
-	static uint16_t SidewalkOffsetY = 80;
+	// Render left and right sidewalk
+	static uint16_t SwOffsetY = 80;
 
-	if(SidewalkOffsetY) {
-		LT24_copyFrameBuffer(lt24, &SidewalkLeft[(320-SidewalkOffsetY)*24], 0, 0, 24, SidewalkOffsetY);
-		LT24_copyFrameBuffer(lt24, &SidewalkRight[(320-SidewalkOffsetY)*24], 240 - 24, 0, 24, SidewalkOffsetY);
+	if(SwOffsetY) {
+		LT24_copyFrameBuffer(lt24, &SidewalkLeft[(LT24_HEIGHT-SwOffsetY)*SW_WIDTH], 0, 0, SW_WIDTH, SwOffsetY);
+		LT24_copyFrameBuffer(lt24, &SidewalkRight[(LT24_HEIGHT-SwOffsetY)*SW_WIDTH], LT24_WIDTH - SW_WIDTH, 0, SW_WIDTH, SwOffsetY);
 	}
-	LT24_copyFrameBuffer(lt24, SidewalkLeft, 0, SidewalkOffsetY, 24, 320 - SidewalkOffsetY);
-	LT24_copyFrameBuffer(lt24, SidewalkRight, 240 - 24, SidewalkOffsetY, 24, 320 - SidewalkOffsetY);
+	LT24_copyFrameBuffer(lt24, SidewalkLeft, 0, SwOffsetY, SW_WIDTH, LT24_HEIGHT - SwOffsetY);
+	LT24_copyFrameBuffer(lt24, SidewalkRight, LT24_WIDTH - SW_WIDTH, SwOffsetY, SW_WIDTH, LT24_HEIGHT - SwOffsetY);
 
-	SidewalkOffsetY = (SidewalkOffsetY + 1);
-	if(SidewalkOffsetY >= 320) {
-		SidewalkOffsetY = 0;
+	SwOffsetY++;
+	if(SwOffsetY >= LT24_HEIGHT) {
+		SwOffsetY = 0;
 	}
-
 
 
 }
