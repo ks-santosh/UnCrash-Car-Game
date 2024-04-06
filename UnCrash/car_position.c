@@ -34,3 +34,18 @@ unsigned int getPressedKeys() {
     // Return result.
     return keys_pressed;
 }
+
+void handle_car_movement(CarPosition *carPos, LT24Display *display) {
+    unsigned int keys_pressed = getPressedKeys();
+
+    // Test if each key has been pressed in turn, carry out action if so.
+    if (keys_pressed & 0x1) {
+        // If KEY0 was pressed, move the car image towards the right (increase x position)
+        (carPos->x) += 10; // You may adjust the value as needed for desired movement speed
+    } else if (keys_pressed & 0x2) {
+        // If KEY1 was pressed, move the car image towards the left (decrease x position)
+        (carPos->x) -= 10; // You may adjust the value as needed for desired movement speed
+    }
+    // Display the updated car position
+    LT24_display_image(display->lt24, Test, display->width, display->height, carPos->x, carPos->y);
+}
