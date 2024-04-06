@@ -21,4 +21,8 @@ int main(void) {
     // Initialize the LCD Display
     exitOnFail(initialize_display(&display), ERR_SUCCESS);
     HPS_ResetWatchdog();
+
+    // Display the image
+    exitOnFail(display_image(&display, Test, carPos.x, carPos.y), ERR_SUCCESS);
+
 }
