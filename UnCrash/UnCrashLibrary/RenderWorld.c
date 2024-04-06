@@ -59,16 +59,21 @@ void RenderWorldBlock(WorldBlock *Block, PLT24Ctx_t lt24) {
 	uint8_t StartRow = Block->Start;
 	uint8_t EndRow = Block->End;
 
-	// Animate left sidewalk
+	// Animate left and right sidewalk
 	static uint16_t SidewalkOffsetY = 80;
+
 	if(SidewalkOffsetY) {
 		LT24_copyFrameBuffer(lt24, &SidewalkLeft[(320-SidewalkOffsetY)*24], 0, 0, 24, SidewalkOffsetY);
+		LT24_copyFrameBuffer(lt24, &SidewalkRight[(320-SidewalkOffsetY)*24], 240 - 24, 0, 24, SidewalkOffsetY);
 	}
 	LT24_copyFrameBuffer(lt24, SidewalkLeft, 0, SidewalkOffsetY, 24, 320 - SidewalkOffsetY);
+	LT24_copyFrameBuffer(lt24, SidewalkRight, 240 - 24, SidewalkOffsetY, 24, 320 - SidewalkOffsetY);
 
 	SidewalkOffsetY = (SidewalkOffsetY + 1);
 	if(SidewalkOffsetY >= 320) {
 		SidewalkOffsetY = 0;
 	}
+
+
 
 }
