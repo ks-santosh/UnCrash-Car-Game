@@ -19,6 +19,8 @@ extern const unsigned short Obstacle6[4096];
 extern const unsigned short Obstacle7[4096];
 extern const unsigned short Obstacle8[4096];
 
+extern const unsigned short Road[4096];
+
 extern const unsigned short *const Obstacles[8];
 
 #endif /* SPRITES_H_ */
