@@ -43,13 +43,19 @@ void SetWorldBlock(WorldBlock *Block) {
 	Block->ObsType2 = ((RandNum >> 9) & 7u);
 	// Set start and end rows to be rendered between;
 	Block->Start = 0;
-	Block->End = 63;
+	Block->End = OB_SIDE-1;
+	// Set the Y position of the world block on LCD
+	Block->OffsetY = 0;
 }
 
 //
 // Renders the world on the LCD by placing world blocks
 //
 void RenderWorldBlock(WorldBlock *Block, PLT24Ctx_t lt24) {
+
+	if(Block->Start >= OB_SIDE) {
+		return;
+	}
 
 	// Local variables
 	uint8_t ObsPlaceType= Block->ObsPlaceType;
@@ -106,4 +112,57 @@ void RenderWorldBlock(WorldBlock *Block, PLT24Ctx_t lt24) {
 		LT24_copyFrameBuffer(lt24, &Road[StartPx], ObsX, BlOffsetY, OB_SIDE, BlHeight);
 	}
 
+}
+
+//
+// Shifts the block position related parameters by given shift value
+//
+void ShiftWorldBlock(WorldBlock WBlocks[], uint8_t ShiftY) {
+
+	// check if the block after shifting is outside frame
+	if(WBlocks[0].OffsetY + ShiftY >= LT24_HEIGHT) {
+
+		// shift the data of the blocks
+		for(uint8_t i = 0; i < 5; i++){
+			WBlocks[i] = WBlocks[i+1];
+		}
+
+		// update the last block with new block design
+		SetWorldBlock(&WBlocks[5]);
+		WBlocks[5].Start = OB_SIDE;
+		WBlocks[5].End = OB_SIDE;
+
+	}
+
+	// down shift first/bottom block
+	WBlocks[0].OffsetY = WBlocks[0].OffsetY + ShiftY;
+	WBlocks[0].Start = 0;
+	WBlocks[0].End = WBlocks[0].End - ShiftY;
+
+	// down shift the four middle blocks
+	for(uint8_t i = 1; i < 5; i++) {
+		WBlocks[i].OffsetY = WBlocks[i].OffsetY + ShiftY;
+		WBlocks[i].Start = 0;
+		WBlocks[i].End = OB_SIDE-1;
+	}
+
+	// down shift last/top world block
+	WBlocks[5].OffsetY = 0;
+	WBlocks[5].Start = WBlocks[5].Start - ShiftY;
+	WBlocks[5].End = OB_SIDE-1;
+
+}
+
+//
+// Renders the whole world on the LCD by placing world blocks
+//
+void RenderWorld(WorldBlock WBlocks[], PLT24Ctx_t lt24,  uint8_t ShiftY) {
+
+
+	for(uint8_t i = 0; i < 6; i++)
+	{
+		RenderWorldBlock(&WBlocks[i], lt24);
+	}
+
+	ShiftWorldBlock(WBlocks, ShiftY);
 }
