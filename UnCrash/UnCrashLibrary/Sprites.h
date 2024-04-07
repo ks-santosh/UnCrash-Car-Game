@@ -23,4 +23,7 @@ extern const unsigned short Road[4096];
 
 extern const unsigned short *const Obstacles[8];
 
+extern const unsigned short CarCrashed[512];
+extern const unsigned short Car[512];
+
 #endif /* SPRITES_H_ */
