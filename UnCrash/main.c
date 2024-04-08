@@ -19,6 +19,8 @@
 #include "HPS_Watchdog/HPS_Watchdog.h"
 #include "HPS_usleep/HPS_usleep.h"
 #include "UnCrashLibrary/RenderWorld.h"
+#include "UnCrashLibrary/RenderCar.h"
+
 
 void exitOnFail(signed int status, signed int successStatus){
     if (status != successStatus) {
@@ -116,5 +118,7 @@ int main(void) {
     while (1) {
     	HPS_ResetWatchdog(); //Just reset the watchdog.
         RenderWorld(WBlocks, lt24, 1);
+        RenderCar(120,160,false,lt24);
+        //RenderCar(120,210,true,lt24);
     }
 }
