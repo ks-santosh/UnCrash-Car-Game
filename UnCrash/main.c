@@ -1,6 +1,8 @@
 // main.c file
 #include "car_position.h"
 #include "Test.h" // Assuming Test.h contains the image data
+#include "DE1SoC_Addresses/DE1SoC_Addresses.h"
+#include "DE1SoC_LT24/DE1SoC_LT24.h"
 #include "HPS_Watchdog/HPS_Watchdog.h"
 #include "HPS_usleep/HPS_usleep.h"
 #include <stdlib.h>

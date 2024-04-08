@@ -2,7 +2,11 @@
 #ifndef CAR_POSITION_H
 #define CAR_POSITION_H
 
+#include "DE1SoC_Addresses/DE1SoC_Addresses.h"
 #include "DE1SoC_LT24/DE1SoC_LT24.h"
+#include "HPS_Watchdog/HPS_Watchdog.h"
+#include "HPS_usleep/HPS_usleep.h"
+#include <stdlib.h>
 
 // Define a structure to represent car position
 typedef struct {

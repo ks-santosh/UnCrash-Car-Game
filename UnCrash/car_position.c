@@ -30,13 +30,13 @@ void handle_car_movement(CarPosition *carPos, LT24Display *display, const unsign
         (carPos->x) -= 10; // You may adjust the value as needed for desired movement speed
     }
     // Display the updated car position
-    LT24_copyFrameBuffer(&(display->lt24), image, , carPos->x, carPos->y, display->width, display->height);
+    LT24_copyFrameBuffer(&(display->lt24), image, carPos->x, carPos->y, display->width, display->height);
 }
 
 int initialize_display(LT24Display *display, volatile unsigned char *gpio_base, volatile unsigned char *lt24_base) {
     display->gpio_base = gpio_base;
     display->lt24_base = lt24_base;
-    return LT24_initialise(&(display->lt24));
+    return LT24_initialise(&(display->lt24), gpio_base, lt24_base);
 }
 
 int display_image(LT24Display *display, const unsigned short *image, int x, int y) {
