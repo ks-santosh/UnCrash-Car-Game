@@ -7,6 +7,17 @@
 #ifndef SPRITES_H_
 #define SPRITES_H_
 
+// Sidewalk Dimensions
+#define SW_WIDTH 24u
+#define SW_HEIGHT 320u
+
+// Obstacle Dimensions
+#define OB_SIDE 64u
+
+// Car dimensions
+#define CAR_HEIGHT 32u
+#define CAR_WIDTH 16u
+
 extern const unsigned short SidewalkLeft[1536];
 extern const unsigned short SidewalkRight[1536];
 
