@@ -114,12 +114,12 @@ int main(void) {
 		HPS_ResetWatchdog();
 		RenderWorldBlock(&blocks[i], lt24);
 	}*/
-
+	int16_t CarPosX;
     while (1) {
     	HPS_ResetWatchdog(); //Just reset the watchdog.
         RenderWorld(WBlocks, lt24, 5);
         //RenderCar(120,160,false,lt24);
-        MoveCar(5, false,lt24);
+        CarPosX = MoveCar(5, false,lt24);
         //RenderCar(120,210,true,lt24);
     }
 }

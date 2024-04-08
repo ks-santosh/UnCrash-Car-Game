@@ -37,7 +37,7 @@ void RenderCar(uint16_t PosX, uint16_t PosY, bool Crash, PLT24Ctx_t lt24) {
 //
 // Shifts the position of the car in x-axis on key press
 //
-void MoveCar(uint8_t ShiftX, bool Crash, PLT24Ctx_t lt24) {
+int16_t MoveCar(uint8_t ShiftX, bool Crash, PLT24Ctx_t lt24) {
 
 	static int16_t PrvPosX = CAR_INIT_POS_X;
 	int16_t PosX = PrvPosX;
@@ -50,7 +50,7 @@ void MoveCar(uint8_t ShiftX, bool Crash, PLT24Ctx_t lt24) {
 
 	if((Crash) || ((N & 9u) == 9u)) {
 		RenderCar(PrvPosX, CAR_POS_Y, Crash, lt24);
-		return;
+		return PosX;
 	}
 
 
@@ -70,7 +70,9 @@ void MoveCar(uint8_t ShiftX, bool Crash, PLT24Ctx_t lt24) {
 		PosX = SW_WIDTH;
 	}
 
+	RenderCar(PosX, CAR_POS_Y, Crash, lt24);
+
 	PrvPosX = PosX;
 
-	RenderCar(PosX, CAR_POS_Y, Crash, lt24);
+	return PosX;
 }

@@ -17,7 +17,7 @@ void RenderCar(uint16_t PosX, uint16_t PosY, bool Crash, PLT24Ctx_t lt24);
 
 //
 // Shifts the position of the car in x-axis on key press
-//
-void MoveCar(uint8_t ShiftX, bool Crash, PLT24Ctx_t lt24);
+// returns the car's top left x position
+int16_t MoveCar(uint8_t ShiftX, bool Crash, PLT24Ctx_t lt24);
 
 #endif /* RENDERCAR_H_ */
