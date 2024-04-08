@@ -117,8 +117,9 @@ int main(void) {
 
     while (1) {
     	HPS_ResetWatchdog(); //Just reset the watchdog.
-        RenderWorld(WBlocks, lt24, 1);
-        RenderCar(120,160,false,lt24);
+        RenderWorld(WBlocks, lt24, 5);
+        //RenderCar(120,160,false,lt24);
+        MoveCar(5, false,lt24);
         //RenderCar(120,210,true,lt24);
     }
 }

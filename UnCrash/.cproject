@@ -60,6 +60,24 @@
 							<tool id="com.arm.tool.librarian.v6.base.var.arm_compiler_6-6.296574722" name="Arm Librarian 6" superClass="com.arm.tool.librarian.v6.base.var.arm_compiler_6-6"/>
 						</toolChain>
 					</folderInfo>
+					<folderInfo id="com.arm.eclipse.build.config.v6.exe.debug.base.var.arm_compiler_6-6.2063014088.464489999" name="/" resourcePath="UnCrashLibrary">
+						<toolChain id="com.arm.toolchain.v6.exe.debug.base.var.arm_compiler_6-6.265320065" name="Arm Compiler for Embedded 6" superClass="com.arm.toolchain.v6.exe.debug.base.var.arm_compiler_6-6" unusedChildren="">
+							<option id="com.arm.toolchain.v6.base.options.debug.level.850803826.1383529807" name="Debug Level" superClass="com.arm.toolchain.v6.base.options.debug.level.850803826"/>
+							<option id="com.arm.toolchain.v6.base.options.target.cpu_fpu.1781150037.900732110" superClass="com.arm.toolchain.v6.base.options.target.cpu_fpu.1781150037"/>
+							<option id="com.arm.toolchain.v6.base.options.floatabi.1680724547.164410399" name="Float ABI" superClass="com.arm.toolchain.v6.base.options.floatabi.1680724547"/>
+							<option id="com.arm.toolchain.v6.base.options.inst.44811720.6200628" name="Instruction set" superClass="com.arm.toolchain.v6.base.options.inst.44811720"/>
+							<tool id="com.arm.tool.c.compiler.v6.base.var.arm_compiler_6-6.1607306707" name="Arm C Compiler for Embedded 6" superClass="com.arm.tool.c.compiler.v6.base.var.arm_compiler_6-6.1318623795">
+								<option id="com.arm.tool.c.compiler.v6.base.option.optlevel.1274764652" name="Optimization level" superClass="com.arm.tool.c.compiler.v6.base.option.optlevel" useByScannerDiscovery="true" value="com.arm.tool.c.compiler.v6.base.option.optlevel.fast" valueType="enumerated"/>
+								<inputType id="com.arm.tool.c.compiler.v6.base.input.2075604216" superClass="com.arm.tool.c.compiler.v6.base.input"/>
+							</tool>
+							<tool id="com.arm.tool.cpp.compiler.v6.base.var.arm_compiler_6-6.1826113428" name="Arm C++ Compiler for Embedded 6" superClass="com.arm.tool.cpp.compiler.v6.base.var.arm_compiler_6-6.1787742589"/>
+							<tool id="com.arm.tool.assembler.v6.base.var.arm_compiler_6-6.342801435" name="Arm Assembler 6" superClass="com.arm.tool.assembler.v6.base.var.arm_compiler_6-6.1524126841">
+								<inputType id="com.arm.tool.assembler.v6.base.input.1566251981" superClass="com.arm.tool.assembler.v6.base.input"/>
+							</tool>
+							<tool id="com.arm.tool.c.linker.v6.base.var.arm_compiler_6-6.1578909099" name="Arm Linker 6" superClass="com.arm.tool.c.linker.v6.base.var.arm_compiler_6-6.2061104550"/>
+							<tool id="com.arm.tool.librarian.v6.base.var.arm_compiler_6-6.1165218033" name="Arm Librarian 6" superClass="com.arm.tool.librarian.v6.base.var.arm_compiler_6-6.296574722"/>
+						</toolChain>
+					</folderInfo>
 					<sourceEntries>
 						<entry excluding="Drivers" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
