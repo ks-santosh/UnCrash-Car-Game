@@ -33,3 +33,44 @@ void RenderCar(uint16_t PosX, uint16_t PosY, bool Crash, PLT24Ctx_t lt24) {
 
 
 }
+
+//
+// Shifts the position of the car in x-axis on key press
+//
+void MoveCar(uint8_t ShiftX, bool Crash, PLT24Ctx_t lt24) {
+
+	static int16_t PrvPosX = CAR_INIT_POS_X;
+	int16_t PosX = PrvPosX;
+
+	// Check for button press
+	volatile unsigned int *KEY_ptr = (unsigned int *)LSC_BASE_KEYS;	// KEY buttons base
+
+	// Set N to KEY[3:0] input value
+	unsigned int N = *KEY_ptr & 0x0F;
+
+	if((Crash) || ((N & 9u) == 9u)) {
+		RenderCar(PrvPosX, CAR_POS_Y, Crash, lt24);
+		return;
+	}
+
+
+	// Check which key is pressed
+	if(N & 1u) {
+		// move right
+		PosX = PrvPosX + ShiftX;
+	} else if(N >> 3) {
+		PosX = PrvPosX - ShiftX;
+	}
+
+	// keep the position in range
+	if(PosX > (LT24_WIDTH - SW_WIDTH - CAR_WIDTH)) {
+		PosX = (LT24_WIDTH - SW_WIDTH - CAR_WIDTH);
+	}
+	else if(PosX < SW_WIDTH) {
+		PosX = SW_WIDTH;
+	}
+
+	PrvPosX = PosX;
+
+	RenderCar(PosX, CAR_POS_Y, Crash, lt24);
+}
