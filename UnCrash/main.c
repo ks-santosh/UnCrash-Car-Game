@@ -122,12 +122,13 @@ int main(void) {
 		RenderWorldBlock(&blocks[i], lt24);
 	}*/
 	uint16_t CarPosX;
-
+	CollisionEvent CollSts = {.Crash = false , .Score = 0};
     while (1) {
     	HPS_ResetWatchdog(); //Just reset the watchdog.
         RenderWorld(WBlocks, lt24, 2);
         //RenderCar(120,160,false,lt24);
         CarPosX = (uint16_t)MoveCar(2, false,lt24);
+        CheckCollision(WBlocks, CarPosX, &CollSts);
         //RenderCar(120,210,true,lt24);
     }
 }
