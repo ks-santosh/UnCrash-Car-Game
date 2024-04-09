@@ -118,4 +118,6 @@ void CheckCollision(WorldBlock WBlocks[], uint16_t CarPosX, CollisionEvent *Coll
 	if((CollSts->Crash) || (PrvScore != CollSts->Score)) {
 		return;
 	}
+
+	PrvScore = CollSts->Score;
 }
