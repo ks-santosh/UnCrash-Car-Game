@@ -77,6 +77,7 @@ void RenderWorldBlock(WorldBlock *Block, PLT24Ctx_t lt24) {
 
 	// Local variables
 	uint8_t ObsPlaceType= Block->ObsPlaceType;
+	uint8_t CoinPlaceType = Block->CoinPlaceType;
 	uint8_t *ObsType = Block->ObsType;
 	uint8_t Start = Block->Start;
 	uint8_t End = Block->End;
@@ -88,31 +89,43 @@ void RenderWorldBlock(WorldBlock *Block, PLT24Ctx_t lt24) {
 
 	// first block : bit 0
 	ObsX = SW_WIDTH;
+	const unsigned short *SetBlock;
 	if(ObsPlaceType & 1u) {
-		LT24_copyFrameBuffer(lt24, &Obstacles[*ObsType][StartPx], ObsX, BlOffsetY, OB_SIDE, BlHeight);
+		SetBlock = &Obstacles[*ObsType][StartPx];
+	}
+	else if (CoinPlaceType & 1u){
+		SetBlock = &Coin[StartPx];
 	}
 	else {
-		LT24_copyFrameBuffer(lt24, &Road[StartPx], ObsX, BlOffsetY, OB_SIDE, BlHeight);
+		SetBlock = &Road[StartPx];
 	}
+	LT24_copyFrameBuffer(lt24, SetBlock, ObsX, BlOffsetY, OB_SIDE, BlHeight);
 
 	// middle block : bit 1
 	ObsX += OB_SIDE;
 	if((ObsPlaceType >> 1) & 1u) {
-		LT24_copyFrameBuffer(lt24, &Obstacles[*ObsType++][StartPx], ObsX, BlOffsetY, OB_SIDE, BlHeight);
+		SetBlock = &Obstacles[*ObsType++][StartPx];
+	}
+	else if ((CoinPlaceType >> 1) & 1u){
+		SetBlock = &Coin[StartPx];
 	}
 	else {
-		LT24_copyFrameBuffer(lt24, &Road[StartPx], ObsX, BlOffsetY, OB_SIDE, BlHeight);
+		SetBlock = &Road[StartPx];
 	}
+	LT24_copyFrameBuffer(lt24,SetBlock, ObsX, BlOffsetY, OB_SIDE, BlHeight);
 
 	// end block : bit 2
 	ObsX += OB_SIDE;
 	if((ObsPlaceType >> 2) & 1u) {
-		LT24_copyFrameBuffer(lt24, &Obstacles[*ObsType++][StartPx], ObsX, BlOffsetY, OB_SIDE, BlHeight);
+		SetBlock = &Obstacles[*ObsType++][StartPx];
+	}
+	else if ((CoinPlaceType >> 2) & 1u){
+		SetBlock = &Coin[StartPx];
 	}
 	else {
-		LT24_copyFrameBuffer(lt24, &Road[StartPx], ObsX, BlOffsetY, OB_SIDE, BlHeight);
+		SetBlock = &Road[StartPx];
 	}
-
+	LT24_copyFrameBuffer(lt24,SetBlock, ObsX, BlOffsetY, OB_SIDE, BlHeight);
 }
 
 //
