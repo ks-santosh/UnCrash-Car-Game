@@ -32,14 +32,16 @@ void SetWorldBlock(WorldBlock *Block) {
 
 	// Get the obstacle placement type : bits 0,1,2
 	uint8_t ObsPlaceType = (RandNum & 7u);
-	if(ObsPlaceType == 7u) {
+
+	// to make way for the car
+	if(PrvObsPlaceType) {
+		ObsPlaceType = 0;
+	}
+	// obstacles should not occupy all the boxes
+	else if(ObsPlaceType == 7u) {
 		ObsPlaceType = 5u;
 	}
 
-	// check if it completely blocks the path
-	if((ObsPlaceType | PrvObsPlaceType) == 7) {
-		ObsPlaceType = ObsPlaceType >> 1;
-	}
 
 	PrvObsPlaceType = ObsPlaceType;
 
