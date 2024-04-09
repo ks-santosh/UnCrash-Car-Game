@@ -48,9 +48,11 @@ void SetWorldBlock(WorldBlock *Block) {
 	// Get the coin placement type : bits 3,4,5
 	Block->CoinPlaceType = ((RandNum >> 3) & 7u);
 	// Get the first Obstacle type : bits 6,7,8
-	Block->ObsType1 = ((RandNum >> 6) & 7u);
-	// Get the second Obstacle type : bits 9,10,1
-	Block->ObsType2 = ((RandNum >> 9) & 7u);
+	Block->ObsType[0] = ((RandNum >> 6) & 7u);
+	// Get the second Obstacle type : bits 9,10,11
+	Block->ObsType[1] = ((RandNum >> 9) & 7u);
+	// Get the third Obstacle type : bits 12, 13, 14
+	Block->ObsType[2] = ((RandNum >> 12) & 7u);
 	// Set start and end rows to be rendered between;
 	Block->Start = 0;
 	Block->End = OB_SIDE-1;
@@ -69,9 +71,7 @@ void RenderWorldBlock(WorldBlock *Block, PLT24Ctx_t lt24) {
 
 	// Local variables
 	uint8_t ObsPlaceType= Block->ObsPlaceType;
-	uint8_t ObsType1 = Block->ObsType1;
-	uint8_t ObsType2 = Block->ObsType2;
-	uint8_t ObsType3 = ObsType1 ^ ObsType2;
+	uint8_t *ObsType = Block->ObsType;
 	uint8_t Start = Block->Start;
 	uint8_t End = Block->End;
 	uint16_t BlOffsetY = Block->OffsetY;
@@ -83,7 +83,7 @@ void RenderWorldBlock(WorldBlock *Block, PLT24Ctx_t lt24) {
 	// first block : bit 0
 	ObsX = SW_WIDTH;
 	if(ObsPlaceType & 1u) {
-		LT24_copyFrameBuffer(lt24, &Obstacles[ObsType1][StartPx], ObsX, BlOffsetY, OB_SIDE, BlHeight);
+		LT24_copyFrameBuffer(lt24, &Obstacles[*ObsType][StartPx], ObsX, BlOffsetY, OB_SIDE, BlHeight);
 	}
 	else {
 		LT24_copyFrameBuffer(lt24, &Road[StartPx], ObsX, BlOffsetY, OB_SIDE, BlHeight);
@@ -92,7 +92,7 @@ void RenderWorldBlock(WorldBlock *Block, PLT24Ctx_t lt24) {
 	// middle block : bit 1
 	ObsX += OB_SIDE;
 	if((ObsPlaceType >> 1) & 1u) {
-		LT24_copyFrameBuffer(lt24, &Obstacles[ObsType2][StartPx], ObsX, BlOffsetY, OB_SIDE, BlHeight);
+		LT24_copyFrameBuffer(lt24, &Obstacles[*ObsType++][StartPx], ObsX, BlOffsetY, OB_SIDE, BlHeight);
 	}
 	else {
 		LT24_copyFrameBuffer(lt24, &Road[StartPx], ObsX, BlOffsetY, OB_SIDE, BlHeight);
@@ -101,7 +101,7 @@ void RenderWorldBlock(WorldBlock *Block, PLT24Ctx_t lt24) {
 	// end block : bit 2
 	ObsX += OB_SIDE;
 	if((ObsPlaceType >> 2) & 1u) {
-		LT24_copyFrameBuffer(lt24, &Obstacles[ObsType3][StartPx], ObsX, BlOffsetY, OB_SIDE, BlHeight);
+		LT24_copyFrameBuffer(lt24, &Obstacles[*ObsType++][StartPx], ObsX, BlOffsetY, OB_SIDE, BlHeight);
 	}
 	else {
 		LT24_copyFrameBuffer(lt24, &Road[StartPx], ObsX, BlOffsetY, OB_SIDE, BlHeight);
