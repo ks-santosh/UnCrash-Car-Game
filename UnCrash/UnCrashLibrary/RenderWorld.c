@@ -46,7 +46,13 @@ void SetWorldBlock(WorldBlock *Block) {
 	Block->ObsPlaceType = ObsPlaceType;
 
 	// Get the coin placement type : bits 3,4,5
-	Block->CoinPlaceType = ((RandNum >> 3) & 7u);
+	uint8_t CoinPlaceType = ((RandNum >> 3) & 7u);
+
+	// Coins and obstacles should not overlap
+	CoinPlaceType = (~ObsPlaceType) & (CoinPlaceType);
+
+	Block->CoinPlaceType = CoinPlaceType;
+
 	// Get the first Obstacle type : bits 6,7,8
 	Block->ObsType[0] = ((RandNum >> 6) & 7u);
 	// Get the second Obstacle type : bits 9,10,11
