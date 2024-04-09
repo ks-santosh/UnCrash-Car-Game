@@ -26,5 +26,9 @@ typedef struct CollisionEvent {
 //
 void SetCollisionAction(WorldBlock WBlocks[], uint16_t Px, uint16_t Py, CollisionEvent *CollSts);
 
+//
+// Checks if the points of car collides with obstacles or coin
+//
+void CheckCollision(WorldBlock WBlocks[], uint16_t CarPosX, CollisionEvent *CollSts);
 
 #endif /* CHECKCOLLISION_H_ */

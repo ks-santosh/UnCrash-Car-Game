@@ -53,15 +53,16 @@ void SetCollisionAction(WorldBlock WBlocks[], uint16_t Px, uint16_t Py, Collisio
 	else {
 
 		WBlockColl = true;
+		Py = Py - WBlocks[2].OffsetY;
 
 		// if box has obstacles
 		if(Box & WBlocks[2].ObsPlaceType) {
-			Py = Py - WBlocks[2].OffsetY;
+
 			Pixel = Obstacles[WBlocks[2].ObsType[ObsId]][Py*64 + Px];
 			CollType = true;
 		}
 		// if box has coins
-		else if(Box & WBlocks[1].CoinPlaceType) {
+		else if(Box & WBlocks[2].CoinPlaceType) {
 			Pixel = Coin[Py*64 + Px];
 		}
 	}
@@ -77,13 +78,44 @@ void SetCollisionAction(WorldBlock WBlocks[], uint16_t Px, uint16_t Py, Collisio
 			CollSts->Score++;
 
 			// remove the coin from the block
-			if(WBlockColl) { // remove coin from WBlocks[1]
-				WBlocks[1].CoinPlaceType = (~Box) & WBlocks[1].CoinPlaceType;
+			if(WBlockColl) { // remove coin from WBlocks[2]
+				WBlocks[2].CoinPlaceType = (~Box) & WBlocks[2].CoinPlaceType;
 			}
 			else {
-				WBlocks[2].CoinPlaceType = (~Box) & WBlocks[2].CoinPlaceType;
+				WBlocks[1].CoinPlaceType = (~Box) & WBlocks[1].CoinPlaceType;
 			}
 		}
 	}
 
+}
+//
+// Checks if the points of car collides with obstacles or coin
+//
+void CheckCollision(WorldBlock WBlocks[], uint16_t CarPosX, CollisionEvent *CollSts) {
+
+	static uint16_t PrvScore = 0; // previous score
+
+	// check car's top-left corner
+	SetCollisionAction(WBlocks, CarPosX, CAR_POS_Y, CollSts);
+	if((CollSts->Crash) || (PrvScore != CollSts->Score)) {
+		return;
+	}
+
+	// check car's bottom-right corner
+	SetCollisionAction(WBlocks, CarPosX + CAR_WIDTH - 1, CAR_POS_Y + CAR_HEIGHT - 1,CollSts);
+	if((CollSts->Crash) || (PrvScore != CollSts->Score)) {
+		return;
+	}
+
+	// check car's top-right corner
+	SetCollisionAction(WBlocks, CarPosX + CAR_WIDTH - 1, CAR_POS_Y,CollSts);
+	if((CollSts->Crash) || (PrvScore != CollSts->Score)) {
+		return;
+	}
+
+	// check car's bottom-left corner
+	SetCollisionAction(WBlocks, CarPosX, CAR_POS_Y + CAR_HEIGHT - 1,CollSts);
+	if((CollSts->Crash) || (PrvScore != CollSts->Score)) {
+		return;
+	}
 }
