@@ -8,8 +8,9 @@
 
 //
 // Finds the pixel value of the world ground at the give coordinates
-// return pixel value
-uint16_t FindPixelValue(WorldBlock WBlocks[], uint16_t Px, uint16_t Py) {
+// and based on it's value it updates the crash status or Score
+//
+void SetCollisionAction(WorldBlock WBlocks[], uint16_t Px, uint16_t Py, CollisionEvent *CollSts) {
 
 	// Pixel
 	uint16_t Pixel = 0x32D0; // colour of road
@@ -29,12 +30,19 @@ uint16_t FindPixelValue(WorldBlock WBlocks[], uint16_t Px, uint16_t Py) {
 	// bits in box represent the position
 	Box = (1 << Box);
 
+	// flag to check if car collided with obstacle or coin
+	bool CollType = false; // false : Coin true : Obstacle
+
+	// To track the block id where point lies
+	bool WBlockColl = false; // false - collision happened in WBlocks[1]
+
 	// Check in WBlock1
 	if(Py >= WBlocks[1].OffsetY) {
 		// if box has obstacles
 		Py = Py - WBlocks[1].OffsetY;
 		if(Box & WBlocks[1].ObsPlaceType) {
 			Pixel = Obstacles[WBlocks[1].ObsType[ObsId]][Py*64 + Px];
+			CollType = true;
 		}
 		// if box has coins
 		else if(Box & WBlocks[1].CoinPlaceType) {
@@ -43,10 +51,14 @@ uint16_t FindPixelValue(WorldBlock WBlocks[], uint16_t Px, uint16_t Py) {
 	}
 	// Check in WBlock2
 	else {
+
+		WBlockColl = true;
+
 		// if box has obstacles
 		if(Box & WBlocks[2].ObsPlaceType) {
 			Py = Py - WBlocks[2].OffsetY;
 			Pixel = Obstacles[WBlocks[2].ObsType[ObsId]][Py*64 + Px];
+			CollType = true;
 		}
 		// if box has coins
 		else if(Box & WBlocks[1].CoinPlaceType) {
@@ -54,5 +66,24 @@ uint16_t FindPixelValue(WorldBlock WBlocks[], uint16_t Px, uint16_t Py) {
 		}
 	}
 
-	return Pixel;
+	// A point of car is not on road
+	if(Pixel != 0x32D0) {
+		if(CollType) {
+			CollSts->Crash = true;
+		}
+		// if collision is with coin
+		else {
+			CollSts->Crash = false;
+			CollSts->Score++;
+
+			// remove the coin from the block
+			if(WBlockColl) { // remove coin from WBlocks[1]
+				WBlocks[1].CoinPlaceType = (~Box) & WBlocks[1].CoinPlaceType;
+			}
+			else {
+				WBlocks[2].CoinPlaceType = (~Box) & WBlocks[2].CoinPlaceType;
+			}
+		}
+	}
+
 }
