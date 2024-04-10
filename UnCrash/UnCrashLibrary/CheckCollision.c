@@ -98,26 +98,30 @@ void CheckCollision(WorldBlock WBlocks[], uint16_t CarPosX, CollisionEvent *Coll
 	// check car's top-left corner
 	SetCollisionAction(WBlocks, CarPosX, CAR_POS_Y, CollSts);
 	if((CollSts->Crash) || (PrvScore != CollSts->Score)) {
+		PrvScore = CollSts->Score;
 		return;
 	}
 
 	// check car's bottom-right corner
 	SetCollisionAction(WBlocks, CarPosX + CAR_WIDTH - 1, CAR_POS_Y + CAR_HEIGHT - 1,CollSts);
 	if((CollSts->Crash) || (PrvScore != CollSts->Score)) {
+		PrvScore = CollSts->Score;
 		return;
 	}
 
 	// check car's top-right corner
 	SetCollisionAction(WBlocks, CarPosX + CAR_WIDTH - 1, CAR_POS_Y,CollSts);
 	if((CollSts->Crash) || (PrvScore != CollSts->Score)) {
+		PrvScore = CollSts->Score;
 		return;
 	}
 
 	// check car's bottom-left corner
 	SetCollisionAction(WBlocks, CarPosX, CAR_POS_Y + CAR_HEIGHT - 1,CollSts);
 	if((CollSts->Crash) || (PrvScore != CollSts->Score)) {
+		PrvScore = CollSts->Score;
 		return;
 	}
 
-	PrvScore = CollSts->Score;
+
 }
