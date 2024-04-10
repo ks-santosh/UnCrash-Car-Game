@@ -20,7 +20,7 @@ void InitialiseSevenSeg() {
 	SevenSegPtrLow[2] = 0x3F;
 	SevenSegPtrLow[3] = 0x3F;
 
-	SevenSegPtrHigh[0] = 0x2C;
+	SevenSegPtrHigh[0] = 0x1A;
 
 	SevenSegPtrHigh[1] = 0x19;
 
