@@ -21,7 +21,7 @@
 #include "UnCrashLibrary/RenderWorld.h"
 #include "UnCrashLibrary/RenderCar.h"
 #include "UnCrashLibrary/CheckCollision.h"
-
+#include "UnCrashLibrary/SetSevenSegDisp.h"
 
 void exitOnFail(signed int status, signed int successStatus){
     if (status != successStatus) {
@@ -96,12 +96,6 @@ void InitWorldBlock(WorldBlock WBlocks[]) {
 // Main Function
 // =============
 int main(void) {
-    //Main Run Loop
-
-	// Game Title Screen
-	// Game Settings
-	// Game Start
-	// Game running
 
 	//Variables
 	PLT24Ctx_t lt24;
@@ -115,20 +109,30 @@ int main(void) {
 
 	// Initialise the world blocks
 	InitWorldBlock(WBlocks);
-
-	/*for(int i = 0; i < 5; i++)
-	{
-		HPS_ResetWatchdog();
-		RenderWorldBlock(&blocks[i], lt24);
-	}*/
 	uint16_t CarPosX;
 	CollisionEvent CollSts = {.Crash = false , .Score = 0};
-    while (1) {
+
+	uint16_t PrvScore = 0;
+
+	InitialiseSevenSeg();
+	while (1) {
+
+    	// reset watchdog timer
     	HPS_ResetWatchdog(); //Just reset the watchdog.
-        RenderWorld(WBlocks, lt24, 2);
-        //RenderCar(120,160,false,lt24);
-        CarPosX = (uint16_t)MoveCar(2, false,lt24);
+
+    	// render the world
+    	RenderWorld(WBlocks, lt24, 2);
+
+    	// move the car on button press
+        CarPosX = (uint16_t)MoveCar(2, CollSts.Crash,lt24);
+
+        // check for crash or coins
         CheckCollision(WBlocks, CarPosX, &CollSts);
-        //RenderCar(120,210,true,lt24);
+
+        // if score updated display it on Seven-Segment
+        if(PrvScore != CollSts.Score) {
+        	SetSevenSegDisp(CollSts.Score);
+        	PrvScore = CollSts.Score;
+        }
     }
 }
