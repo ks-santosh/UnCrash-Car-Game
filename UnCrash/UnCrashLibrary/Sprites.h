@@ -34,6 +34,7 @@ typedef struct WorldBlock {
 #define CAR_POS_Y  208u			// Car top left Y position is fixed
 #define CAR_INIT_POS_X 112u		// Car top left X position at the start
 
+extern const unsigned short GameStartScreen[76800];
 
 extern const unsigned short SidewalkLeft[1536];
 extern const unsigned short SidewalkRight[1536];
