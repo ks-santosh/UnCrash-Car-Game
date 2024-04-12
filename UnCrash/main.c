@@ -22,6 +22,7 @@
 #include "UnCrashLibrary/RenderCar.h"
 #include "UnCrashLibrary/CheckCollision.h"
 #include "UnCrashLibrary/SetSevenSegDisp.h"
+#include "UnCrashLibrary/PlayAudio.h"
 
 void exitOnFail(signed int status, signed int successStatus){
     if (status != successStatus) {
@@ -105,6 +106,21 @@ int main(void) {
 			ERR_SUCCESS);                                                  //Exit if not successful
 	HPS_ResetWatchdog();
 
+	//Drivers
+	PFPGAPIOCtx_t leds;
+	PWM8731Ctx_t audio;
+	PHPSGPIOCtx_t gpio;
+	PHPSI2CCtx_t   i2c;
+
+	//Initialise Drivers
+	exitOnFail(FPGA_PIO_initialise(LSC_BASE_RED_LEDS,LSC_CONFIG_RED_LEDS, &leds), ERR_SUCCESS);
+    exitOnFail(HPS_GPIO_initialise(LSC_BASE_ARM_GPIO, ARM_GPIO_DIR, ARM_GPIO_I2C_GENERAL_MUX, 0, &gpio), ERR_SUCCESS);
+    exitOnFail(HPS_I2C_initialise(LSC_BASE_I2C_GENERAL, I2C_SPEED_STANDARD, &i2c), ERR_SUCCESS);
+    exitOnFail(WM8731_initialise(LSC_BASE_AUDIOCODEC, i2c, &audio), ERR_SUCCESS);
+
+    //Clear both FIFOs
+    WM8731_clearFIFO(audio, true,true);
+
 	WorldBlock WBlocks[6];
 
 	// Initialise the world blocks
@@ -153,6 +169,7 @@ int main(void) {
         // if score updated display it on Seven-Segment
         if(PrvScore != CollSts.Score) {
         	SetSevenSegDisp(CollSts.Score);
+        	PlayCoinSound(audio);
         	PrvScore = CollSts.Score;
         }
     }
