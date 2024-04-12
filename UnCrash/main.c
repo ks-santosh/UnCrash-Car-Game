@@ -114,7 +114,23 @@ int main(void) {
 
 	uint16_t PrvScore = 0;
 
+
 	InitialiseSevenSeg();
+
+	LT24_copyFrameBuffer(lt24, GameStartScreen, 0, 0, LT24_WIDTH, LT24_HEIGHT);
+
+	volatile unsigned int *KEY_ptr = (unsigned int *)LSC_BASE_KEYS;
+	// Set N to KEY[3:0] input value
+	unsigned int N = *KEY_ptr & 0x0F;
+
+	while(1) {
+		// reset watchdog timer
+		HPS_ResetWatchdog();
+		if(*KEY_ptr & 4u){
+			break;
+		}
+	}
+
 	while (1) {
 
     	// reset watchdog timer
@@ -129,10 +145,17 @@ int main(void) {
         // check for crash or coins
         CheckCollision(WBlocks, CarPosX, &CollSts);
 
+        // if crash detected break from the loop
+        if(CollSts.Crash) {
+        	break;
+        }
+
         // if score updated display it on Seven-Segment
         if(PrvScore != CollSts.Score) {
         	SetSevenSegDisp(CollSts.Score);
         	PrvScore = CollSts.Score;
         }
     }
+
+
 }
