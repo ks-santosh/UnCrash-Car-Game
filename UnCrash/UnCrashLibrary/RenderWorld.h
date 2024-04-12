@@ -34,4 +34,9 @@ void ShiftWorldBlock(WorldBlock WBlocks[], uint8_t ShiftY);
 //
 void RenderWorld(WorldBlock *Block, PLT24Ctx_t ctx, uint8_t ShiftY);
 
+//
+// Sets the initial game world configuration
+//
+void InitWorldBlock(WorldBlock WBlocks[]);
+
 #endif /* RENDERWORLD_H_ */
