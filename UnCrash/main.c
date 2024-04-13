@@ -43,10 +43,6 @@ int main(void) {
 	PHPSGPIOCtx_t gpio;
 	PHPSI2CCtx_t   i2c;
 
-	// Game Variables
-	WorldBlock WBlocks[6];
-	CollisionEvent CollSts = {.Crash = false , .Score = 0};
-
 	//Initialise the LCD Display.
 	exitOnFail(LT24_initialise(LSC_BASE_GPIO_JP1,LSC_BASE_LT24HWDATA, &lt24), ERR_SUCCESS);                                                  //Exit if not successful
 	HPS_ResetWatchdog();
@@ -60,29 +56,33 @@ int main(void) {
     //Clear both FIFOs
     WM8731_clearFIFO(audio, true,true);
 
-	//Initialise the Game world
+
+	// Game Variables
+	WorldBlock WBlocks[6];	// Stores game block configurations
+	CollisionEvent CollSts = {.Crash = false , .Score = 0};	// Collision event status
+	uint16_t CarPosX;		// Tracks car current position
+	uint16_t PrvScore = 0;	// Previous score to track increment in score
+
+    //Initialise the Game world
 	InitWorldBlock(WBlocks);
-
-	uint16_t CarPosX;
-
-	uint16_t PrvScore = 0;
-
-
 	InitialiseSevenSeg();
-
-	LT24_copyFrameBuffer(lt24, GameStartScreen, 0, 0, LT24_WIDTH, LT24_HEIGHT);
+	LT24_copyGrayFrameBuffer(lt24, GameStartScreen, 0, 0, LT24_WIDTH, LT24_HEIGHT);
 
 	volatile unsigned int *KEY_ptr = (unsigned int *)LSC_BASE_KEYS;
-	// Set N to KEY[3:0] input value
-	unsigned int N = *KEY_ptr & 0x0F;
 
+	// Check for Key3 press
 	while(1) {
-		// reset watchdog timer
-		HPS_ResetWatchdog();
+
 		if(*KEY_ptr & 4u){
 			break;
 		}
+
+		// reset watchdog timer
+		HPS_ResetWatchdog();
 	}
+
+	// Play music before game begins
+	PlayMusic(audio);
 
 	while (1) {
 
@@ -106,11 +106,21 @@ int main(void) {
         // if score updated display it on Seven-Segment
         if(PrvScore != CollSts.Score) {
         	SetSevenSegDisp(CollSts.Score);
+
+        	// Play coin sound effect
         	PlayCoinSound(audio);
+
         	PrvScore = CollSts.Score;
         }
 
     }
+
+	// Play music after game ends
+	PlayMusic(audio);
+
+	// Show game end screen
+	RenderGrayScreen(WBlocks, lt24);
+	MoveCar(0, CollSts.Crash, lt24);
 
 
 }
