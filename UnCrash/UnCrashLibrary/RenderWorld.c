@@ -264,3 +264,72 @@ void InitWorldBlock(WorldBlock WBlocks[]) {
 	WBlocks[5].OffsetY = 0;
 
 }
+
+//
+// Displays the grayscale version of the frame
+//
+void RenderGrayScreen(WorldBlock WBlocks[], PLT24Ctx_t lt24) {
+
+	WorldBlock Block;
+	for(uint8_t i = 0; i < 6; i++)
+	{
+		Block = WBlocks[i];
+
+		// Local variables
+		uint8_t ObsPlaceType= Block.ObsPlaceType;
+		uint8_t CoinPlaceType = Block.CoinPlaceType;
+		uint8_t *ObsType = Block.ObsType;
+		uint8_t Start = Block.Start;
+		uint8_t End = Block.End;
+		uint16_t BlOffsetY = Block.OffsetY;
+
+		uint8_t ObsX; 							// Left-X value for obstacles
+		uint16_t StartPx = Start * OB_SIDE;		// block start pixel value to render from
+		uint16_t BlHeight = End - Start + 1;	// block height in rows
+
+		// first block : bit 0
+		ObsX = SW_WIDTH;
+		const unsigned short *SetBlock;
+		if(ObsPlaceType & 1u) {
+			SetBlock = &Obstacles[*ObsType][StartPx];
+		}
+		else if (CoinPlaceType & 1u){
+			SetBlock = &Coin[StartPx];
+		}
+		else {
+			SetBlock = &Road[StartPx];
+		}
+		LT24_copyGrayFrameBuffer(lt24, SetBlock, ObsX, BlOffsetY, OB_SIDE, BlHeight);
+
+		// middle block : bit 1
+		ObsX += OB_SIDE;
+		if((ObsPlaceType >> 1) & 1u) {
+			SetBlock = &Obstacles[*ObsType++][StartPx];
+		}
+		else if ((CoinPlaceType >> 1) & 1u){
+			SetBlock = &Coin[StartPx];
+		}
+		else {
+			SetBlock = &Road[StartPx];
+		}
+		LT24_copyGrayFrameBuffer(lt24,SetBlock, ObsX, BlOffsetY, OB_SIDE, BlHeight);
+
+		// end block : bit 2
+		ObsX += OB_SIDE;
+		if((ObsPlaceType >> 2) & 1u) {
+			SetBlock = &Obstacles[*ObsType++][StartPx];
+		}
+		else if ((CoinPlaceType >> 2) & 1u){
+			SetBlock = &Coin[StartPx];
+		}
+		else {
+			SetBlock = &Road[StartPx];
+		}
+		LT24_copyGrayFrameBuffer(lt24,SetBlock, ObsX, BlOffsetY, OB_SIDE, BlHeight);
+	}
+
+	LT24_copyGrayFrameBuffer(lt24, SidewalkLeft, 0, 0, SW_WIDTH, LT24_HEIGHT);
+	LT24_copyGrayFrameBuffer(lt24, SidewalkRight, LT24_WIDTH - SW_WIDTH, 0, SW_WIDTH, LT24_HEIGHT);
+
+
+}
