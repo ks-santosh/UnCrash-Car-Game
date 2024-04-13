@@ -37,6 +37,8 @@ const uint8_t Z[20] =   {0, 0, 0, 0, 255, 255, 0, 255, 255, 0, 255, 255, 0, 255,
 
 const uint8_t *const Alphabet[26] = {A, B, C, D, E, F, G, H, I, J, K, L, M, N, O ,P, Q, R, S, T, U, V, W, X, Y, Z};
 
+const uint8_t AlWidth[26] = {4, 4, 4, 4, 4, 4, 4, 4, 3, 4, 4, 4, 5, 4, 4, 4, 4, 4, 4, 5, 4, 5, 5, 4, 5, 4};
+
 // Numbers pixel array
 const uint8_t Num0[20] =  {255, 0, 0, 255, 0, 255, 255, 0, 0, 255, 255, 0, 0, 255, 255, 0, 255, 0, 0, 255 };
 const uint8_t Num1[15] =  {255, 0, 255, 0, 0, 255, 255, 0, 255, 255, 0, 255, 0, 0, 0 };
@@ -50,3 +52,5 @@ const uint8_t Num8[20] =  {255, 0, 0, 255, 0, 255, 255, 0, 255, 0, 0, 255, 0, 25
 const uint8_t Num9[20] =  {255, 0, 0, 255, 0, 255, 255, 0, 255, 0, 0, 0, 255, 255, 255, 0, 255, 255, 0, 255 };
 
 const uint8_t *const Digits[10] = {Num0, Num1, Num2, Num3, Num4, Num5, Num6, Num7, Num8, Num9};
+
+const uint8_t DiWidth[10] = {4, 3, 4, 4, 4, 4, 4, 4, 4, 4};
