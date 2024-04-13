@@ -11,6 +11,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#define FONT_HEIGHT 5
+
 // array of 2d pixel array image of alphabets
 extern const uint8_t *const Alphabet[26];
 
