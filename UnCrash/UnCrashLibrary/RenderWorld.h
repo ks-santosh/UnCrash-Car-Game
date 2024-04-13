@@ -39,4 +39,9 @@ void RenderWorld(WorldBlock *Block, PLT24Ctx_t ctx, uint8_t ShiftY);
 //
 void InitWorldBlock(WorldBlock WBlocks[]);
 
+//
+// Displays the grayscale version of the frame
+//
+void RenderGrayScreen(WorldBlock WBlocks[], PLT24Ctx_t lt24);
+
 #endif /* RENDERWORLD_H_ */
