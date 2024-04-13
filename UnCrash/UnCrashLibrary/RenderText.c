@@ -11,6 +11,7 @@ void RenderText(char Text[], uint8_t TxtLen, TextFormat *Style, PLT24Ctx_t lt24)
 	// Local Variables
 	int16_t PosX = Style->PosX;
 	int16_t PosY = Style->PosY;
+	uint8_t Scale = Style->Scale;
 
 	const uint8_t *Letter;
 
@@ -21,7 +22,7 @@ void RenderText(char Text[], uint8_t TxtLen, TextFormat *Style, PLT24Ctx_t lt24)
 
 		// blank space
 		if(TxtChar == 32){
-			PosX = PosX + 5;
+			PosX = PosX + FONT_HEIGHT * Scale;
 			continue;
 		}
 
@@ -32,21 +33,25 @@ void RenderText(char Text[], uint8_t TxtLen, TextFormat *Style, PLT24Ctx_t lt24)
 		// iterate through columns and rows of pixel
 		for(uint8_t c = 0; c < AlWidth[CharIdx]; c++) {
 
-			for(uint8_t r = 0; r < 5; r++) {
+			for(uint8_t r = 0; r < FONT_HEIGHT; r++) {
 
 				// if pixel is 0 (black)
 				if(! *(Letter + c + AlWidth[CharIdx] * r)) {
-					LT24_drawPixel(lt24, Style->Colour, PosX+c, PosY+r);
+					LT24_drawColourWindow(lt24, Style->Colour, PosX+c*Scale, PosY+r*Scale, Scale, Scale);
+					//LT24_drawPixel(lt24, Style->Colour, PosX+c, PosY+r);
 				}
 			}
 		}
 
-		PosX = PosX + AlWidth[CharIdx] + 1;
+		PosX = PosX + AlWidth[CharIdx]*Scale + Scale;
 	}
+
+	Style->LcPosX = PosX;
+	Style->LcPosY = PosY;
 }
 
 void SetScreenText(PLT24Ctx_t lt24) {
 	char Text[] = "hello world";
-	TextFormat Style = {.Scale = 1, .PosX = 120, .PosY = 160, .Colour = 0xF800, .Wrap = false};
+	TextFormat Style = {.Scale = 5, .PosX = 24, .PosY = 160, .Colour = 0xF800, .Wrap = false};
 	RenderText(Text, strlen(Text), &Style, lt24);
 }
