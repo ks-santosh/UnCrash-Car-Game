@@ -6,6 +6,9 @@
  */
 #include "RenderText.h"
 
+//
+// Renders Text with the given format on LT24
+//
 void RenderText(char Text[], uint8_t TxtLen, TextFormat *Style, PLT24Ctx_t lt24) {
 
 	// Local Variables
@@ -61,8 +64,66 @@ void RenderText(char Text[], uint8_t TxtLen, TextFormat *Style, PLT24Ctx_t lt24)
 	Style->LcPosY = PosY;
 }
 
-void SetScreenText(PLT24Ctx_t lt24) {
-	char TextCrash[] = "CRASH0123";
-	TextFormat Style = {.Scale = 5, .PosX = 24, .PosY = 160, .Colour = 0xF800, .Wrap = false};
-	RenderText(TextCrash, strlen(TextCrash), &Style, lt24);
+//
+// The text format to display after game ends
+//
+void SetScreenText(uint16_t Score, PLT24Ctx_t lt24) {
+
+	if(Score > 9999) {
+		Score = 9999;
+	}
+
+	char TextCrash[] = "CRASH";
+	TextFormat Style = {.Scale = 8, .PosX = 24, .PosY = 30, .Colour = 0xF800};
+
+	if(Score < 9999) {
+		RenderText(TextCrash, strlen(TextCrash), &Style, lt24);
+	}
+	else
+	{
+		char TextGameEnd[] = "GAME END";
+		Style.Scale = 5;
+		Style.PosX = 20;
+		Style.Colour =  0x3667;
+		RenderText(TextGameEnd, strlen(TextGameEnd), &Style, lt24);
+	}
+
+	char TextScore[] = "SCORE";
+	Style.PosY = Style.PosY + FONT_HEIGHT* Style.Scale + 20;
+	Style.Scale = 8;
+	Style.Colour = 0xFFE0;
+	RenderText(TextScore, strlen(TextScore), &Style, lt24);
+
+	char NumScore[4];
+	sprintf(NumScore, "%d", Score);
+	// calculate score x position to display in middle
+	uint8_t ScoreWidth = 0;
+	for(uint8_t i = 0; NumScore[i] != '\0'; i++) {
+		ScoreWidth += DiWidth[NumScore[i]-'0']*Style.Scale + Style.Scale;
+	}
+	ScoreWidth -= Style.Scale; // remove trail space width
+	Style.PosX = (LT24_WIDTH - ScoreWidth)/2;
+	Style.PosY = Style.PosY + FONT_HEIGHT* Style.Scale + 20;
+	Style.Colour = 0xFD00;
+	RenderText(NumScore, strlen(NumScore), &Style, lt24);
+
+	char TextKeyPress[] = "PRESS KEY2 TO";
+	Style.PosY = Style.PosY + FONT_HEIGHT* Style.Scale + 20;
+	Style.PosX = 23;
+	Style.Scale = 3;
+	Style.Colour = 0x3667;
+	RenderText(TextKeyPress, strlen(TextKeyPress), &Style, lt24);
+
+	char TextKeyNum[] = "2";
+	Style.PosX = 23 + 46*Style.Scale;
+	Style.Colour = 0xFFFF;
+	RenderText(TextKeyNum, strlen(TextKeyNum), &Style, lt24);
+
+	char TextRestart[] = "RESTART";
+	Style.PosY = Style.PosY + FONT_HEIGHT* Style.Scale + 20;
+	Style.PosX = 30;
+	Style.Scale = 5;
+	Style.Colour = 0x3667;
+	RenderText(TextRestart, strlen(TextRestart), &Style, lt24);
+
 }
