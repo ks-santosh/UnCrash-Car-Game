@@ -12,6 +12,9 @@
 #include <stdbool.h>
 #include "Sprites.h"
 
+// Maximum score achievable in game
+#define MAX_SCORE 9999
+
 //
 // Stores the action of collision event: crash or collect coin
 //

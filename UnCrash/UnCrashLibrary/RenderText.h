@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include "DE1SoC_LT24/DE1SoC_LT24.h"
+#include "CheckCollision.h"
 #include "Font.h"
 #include "string.h"
 #include "ctype.h"
@@ -28,7 +29,7 @@ typedef struct TextFormat {
 //
 // Renders Text with the given format on LT24
 //
-void RenderText(char Text[], uint8_t TxtLen, TextFormat *Style, PLT24Ctx_t lt24)
+void RenderText(char Text[], uint8_t TxtLen, TextFormat *Style, PLT24Ctx_t lt24);
 
 //
 // The text format to display after game ends
