@@ -208,7 +208,7 @@ void InitWorldBlock(WorldBlock WBlocks[]) {
 	WBlocks[0].ObsType[0] = 0;
 	WBlocks[0].ObsType[1] = 1;
 	WBlocks[0].ObsType[2] = 2;
-	WBlocks[0].CoinPlaceType = 2;
+	WBlocks[0].CoinPlaceType = 0;
 	WBlocks[0].Start = 0;
 	WBlocks[0].End = OB_SIDE - 1;
 	WBlocks[0].OffsetY = 4*OB_SIDE;
@@ -218,7 +218,7 @@ void InitWorldBlock(WorldBlock WBlocks[]) {
 	WBlocks[1].ObsType[0] = 3;
 	WBlocks[1].ObsType[1] = 4;
 	WBlocks[1].ObsType[2] = 5;
-	WBlocks[1].CoinPlaceType = 2;
+	WBlocks[1].CoinPlaceType = 0;
 	WBlocks[1].Start = 0;
 	WBlocks[1].End = OB_SIDE - 1;
 	WBlocks[1].OffsetY = 3*OB_SIDE;
@@ -228,7 +228,7 @@ void InitWorldBlock(WorldBlock WBlocks[]) {
 	WBlocks[2].ObsType[0] = 6;
 	WBlocks[2].ObsType[1] = 7;
 	WBlocks[2].ObsType[2] = 0;
-	WBlocks[2].CoinPlaceType = 2;
+	WBlocks[2].CoinPlaceType = 0;
 	WBlocks[2].Start = 0;
 	WBlocks[2].End = OB_SIDE - 1;
 	WBlocks[2].OffsetY = 2*OB_SIDE;
