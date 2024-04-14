@@ -23,6 +23,7 @@
 #include "UnCrashLibrary/CheckCollision.h"
 #include "UnCrashLibrary/SetSevenSegDisp.h"
 #include "UnCrashLibrary/PlayAudio.h"
+#include "UnCrashLibrary/RenderText.h"
 
 void exitOnFail(signed int status, signed int successStatus){
     if (status != successStatus) {
@@ -59,68 +60,96 @@ int main(void) {
 
 	// Game Variables
 	WorldBlock WBlocks[6];	// Stores game block configurations
-	CollisionEvent CollSts = {.Crash = false , .Score = 0};	// Collision event status
+	CollisionEvent CollSts;	// Collision event status
 	uint16_t CarPosX;		// Tracks car current position
 	uint16_t PrvScore = 0;	// Previous score to track increment in score
+	uint8_t CarShiftX = 5;	// car left-right shift by position if key pressed
+	uint8_t WorldShiftY = 3;// world shift down position every iteration
 
-    //Initialise the Game world
-	InitWorldBlock(WBlocks);
-	InitialiseSevenSeg();
-	LT24_copyGrayFrameBuffer(lt24, GameStartScreen, 0, 0, LT24_WIDTH, LT24_HEIGHT);
-
-	volatile unsigned int *KEY_ptr = (unsigned int *)LSC_BASE_KEYS;
-
-	// Check for Key3 press
+	// Game Main Loop
 	while(1) {
 
-		if(*KEY_ptr & 4u){
-			break;
+		//Initialise the Game world
+		InitWorldBlock(WBlocks);
+		InitialiseSevenSeg();
+		LT24_copyFrameBuffer(lt24, GameStartScreen, 0, 0, LT24_WIDTH, LT24_HEIGHT);
+		CollSts.Crash = false;
+		CollSts.Score = 0;
+		CarPosX = CAR_INIT_POS_X;
+		HPS_ResetWatchdog();
+
+		volatile unsigned int *KEY_ptr = (unsigned int *)LSC_BASE_KEYS;
+
+		// Check for Key2 press
+		while(1) {
+
+			if(*KEY_ptr & 4u){
+				break;
+			}
+
+			// reset watchdog timer
+			HPS_ResetWatchdog();
 		}
 
-		// reset watchdog timer
-		HPS_ResetWatchdog();
-	}
+		// Play music before game begins
+		PlayMusic(audio);
 
-	// Play music before game begins
-	PlayMusic(audio);
+		while (1) {
 
-	while (1) {
+			// reset watchdog timer
+			HPS_ResetWatchdog(); //Just reset the watchdog.
 
-    	// reset watchdog timer
-    	HPS_ResetWatchdog(); //Just reset the watchdog.
+			// render the world
+			RenderWorld(WBlocks, lt24, WorldShiftY);
 
-    	// render the world
-    	RenderWorld(WBlocks, lt24, 2);
+			// move the car on button press
+			CarPosX = (uint16_t)MoveCar((int16_t)CarPosX, CarShiftX, CollSts.Crash,lt24);
 
-    	// move the car on button press
-        CarPosX = (uint16_t)MoveCar(2, CollSts.Crash,lt24);
+			// check for crash or coins
+			CheckCollision(WBlocks, CarPosX, &CollSts);
 
-        // check for crash or coins
-        CheckCollision(WBlocks, CarPosX, &CollSts);
+			// if crash detected break from the loop
+			if(CollSts.Crash) {
+				break;
+			}
 
-        // if crash detected break from the loop
-        if(CollSts.Crash) {
-        	break;
-        }
+			// if score updated display it on Seven-Segment
+			if(PrvScore != CollSts.Score) {
+				SetSevenSegDisp(CollSts.Score);
 
-        // if score updated display it on Seven-Segment
-        if(PrvScore != CollSts.Score) {
-        	SetSevenSegDisp(CollSts.Score);
+				// Play coin sound effect
+				PlayCoinSound(audio);
 
-        	// Play coin sound effect
-        	PlayCoinSound(audio);
+				PrvScore = CollSts.Score;
 
-        	PrvScore = CollSts.Score;
-        }
+				// game ends if max score achieved
+				if(CollSts.Score == MAX_SCORE) {
+					break;
+				}
+			}
+		}
 
-    }
+		// Play music after game ends
+		PlayMusic(audio);
 
-	// Play music after game ends
-	PlayMusic(audio);
+		// Show game end screen
+		RenderGrayScreen(WBlocks, lt24);
+		MoveCar((int16_t)CarPosX, 0, CollSts.Crash, lt24);
+		SetScreenText(CollSts.Score, lt24);
 
-	// Show game end screen
-	RenderGrayScreen(WBlocks, lt24);
-	MoveCar(0, CollSts.Crash, lt24);
+		// Check for Key2 press
+		while(1) {
 
+			if(*KEY_ptr & 4u){
+				break;
+			}
 
+			// reset watchdog timer
+			HPS_ResetWatchdog();
+		}
+
+		// Play music before changing screen
+		PlayMusic(audio);
+
+	} // Game Main Loop end
 }
