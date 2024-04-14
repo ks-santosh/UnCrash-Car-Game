@@ -69,8 +69,8 @@ void RenderText(char Text[], uint8_t TxtLen, TextFormat *Style, PLT24Ctx_t lt24)
 //
 void SetScreenText(uint16_t Score, PLT24Ctx_t lt24) {
 
-	if(Score > 9999) {
-		Score = 9999;
+	if(Score > MAX_SCORE) {
+		Score = MAX_SCORE;
 	}
 
 	char TextCrash[] = "CRASH";
