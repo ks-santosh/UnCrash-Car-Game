@@ -166,10 +166,10 @@ int main(void) {
 		MoveCar((int16_t)CarPosX, 0, CollSts.Crash, lt24);
 		SetScreenText(CollSts.Score, lt24);
 
-		// Check for Key2 press
+		// Check for Key1 press
 		while(1) {
 
-			if(*KEY_ptr & 4u){
+			if(*KEY_ptr & 2u){
 				break;
 			}
 
