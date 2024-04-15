@@ -1,5 +1,47 @@
 #include "RenderWorld.h"
 
+//Copy frame buffer to display after converting it to grayscale image
+// - returns 0 if successful
+HpsErr_t LT24_copyGrayFrameBuffer( PLT24Ctx_t ctx, const unsigned short* framebuffer, unsigned int xleft, unsigned int ytop, unsigned int width, unsigned int height ) {
+    //Define Window (setWindow validates context for us)
+    HpsErr_t status = LT24_setWindow(ctx, xleft, ytop, width, height);
+    if (IS_ERROR(status)) return status;
+    //And copy the required number of pixels
+    unsigned int cnt = (height * width);
+
+    unsigned short Px, red, green, blue, grayscale;
+    while (cnt--) {
+        Px = *framebuffer++;
+
+		// convert rgb565 to grayscale
+		red = ((Px & 0xF800)>>11);
+		green = ((Px & 0x07E0)>>5);
+		blue = (Px & 0x001F);
+		grayscale = (0.2126 * red) + (0.7152 * green / 2.0) + (0.0722 * blue);
+
+		Px = (grayscale<<11) + (grayscale<<6) + grayscale;
+
+		LT24_write(ctx, true, Px);
+    }
+    return ERR_SUCCESS;
+}
+
+// Function to set single colour to a part of the display
+// - returns true if successful
+HpsErr_t LT24_drawColourWindow( PLT24Ctx_t ctx, unsigned short Colour, unsigned int xleft, unsigned int ytop, unsigned int width, unsigned int height ) {
+    //Define Window (setWindow validates context for us)
+    HpsErr_t status = LT24_setWindow(ctx, xleft, ytop, width, height);
+    if (IS_ERROR(status)) return status;
+    //And copy the required number of pixels
+    unsigned int cnt = (height * width);
+
+    unsigned short Px, red, green, blue, grayscale;
+    while (cnt--) {
+        LT24_write(ctx, true, Colour);
+    }
+    return ERR_SUCCESS;
+}
+
 //
 // Generated 16 bit random number using Linear-Feedback Shift Register
 //
@@ -94,40 +136,46 @@ void RenderWorldBlock(WorldBlock *Block, PLT24Ctx_t lt24) {
 	const unsigned short *SetBlock;
 	if(ObsPlaceType & 1u) {
 		SetBlock = &Obstacles[*ObsType][StartPx];
+		LT24_copyFrameBuffer(lt24, SetBlock, ObsX, BlOffsetY, OB_SIDE, BlHeight);
 	}
 	else if (CoinPlaceType & 1u){
 		SetBlock = &Coin[StartPx];
+		LT24_copyFrameBuffer(lt24, SetBlock, ObsX, BlOffsetY, OB_SIDE, BlHeight);
 	}
 	else {
-		SetBlock = &Road[StartPx];
+		LT24_drawColourWindow(lt24, ROAD_COLOUR, ObsX, BlOffsetY, OB_SIDE, BlHeight);
 	}
-	LT24_copyFrameBuffer(lt24, SetBlock, ObsX, BlOffsetY, OB_SIDE, BlHeight);
 
 	// middle block : bit 1
 	ObsX += OB_SIDE;
 	if((ObsPlaceType >> 1) & 1u) {
 		SetBlock = &Obstacles[*ObsType++][StartPx];
+		LT24_copyFrameBuffer(lt24,SetBlock, ObsX, BlOffsetY, OB_SIDE, BlHeight);
 	}
 	else if ((CoinPlaceType >> 1) & 1u){
 		SetBlock = &Coin[StartPx];
+		LT24_copyFrameBuffer(lt24,SetBlock, ObsX, BlOffsetY, OB_SIDE, BlHeight);
 	}
 	else {
-		SetBlock = &Road[StartPx];
+		LT24_drawColourWindow(lt24, ROAD_COLOUR, ObsX, BlOffsetY, OB_SIDE, BlHeight);
 	}
-	LT24_copyFrameBuffer(lt24,SetBlock, ObsX, BlOffsetY, OB_SIDE, BlHeight);
+
 
 	// end block : bit 2
 	ObsX += OB_SIDE;
 	if((ObsPlaceType >> 2) & 1u) {
 		SetBlock = &Obstacles[*ObsType++][StartPx];
+		LT24_copyFrameBuffer(lt24,SetBlock, ObsX, BlOffsetY, OB_SIDE, BlHeight);
 	}
 	else if ((CoinPlaceType >> 2) & 1u){
 		SetBlock = &Coin[StartPx];
+		LT24_copyFrameBuffer(lt24,SetBlock, ObsX, BlOffsetY, OB_SIDE, BlHeight);
 	}
 	else {
 		SetBlock = &Road[StartPx];
+		LT24_drawColourWindow(lt24,ROAD_COLOUR, ObsX, BlOffsetY, OB_SIDE, BlHeight);
 	}
-	LT24_copyFrameBuffer(lt24,SetBlock, ObsX, BlOffsetY, OB_SIDE, BlHeight);
+
 }
 
 //
@@ -330,6 +378,5 @@ void RenderGrayScreen(WorldBlock WBlocks[], PLT24Ctx_t lt24) {
 
 	LT24_copyGrayFrameBuffer(lt24, SidewalkLeft, 0, 0, SW_WIDTH, LT24_HEIGHT);
 	LT24_copyGrayFrameBuffer(lt24, SidewalkRight, LT24_WIDTH - SW_WIDTH, 0, SW_WIDTH, LT24_HEIGHT);
-
 
 }
