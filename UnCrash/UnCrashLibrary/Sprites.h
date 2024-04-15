@@ -34,6 +34,11 @@ typedef struct WorldBlock {
 #define CAR_POS_Y  208u			// Car top left Y position is fixed
 #define CAR_INIT_POS_X 112u		// Car top left X position at the start
 
+// Task Sample Time
+#define FQ_TIMER 200000000				// ARM A9 private timer frequency
+#define TS_TASK	0.05					// Task sample time in seconds
+#define SP_TASK FQ_TIMER * TS_TASK		// Number of samples for task
+
 extern const unsigned short GameStartScreen[76800];
 
 extern const unsigned short SidewalkLeft[1536];
