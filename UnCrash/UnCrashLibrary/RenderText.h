@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include "DE1SoC_LT24/DE1SoC_LT24.h"
+#include "RenderWorld.h"
 #include "CheckCollision.h"
 #include "Font.h"
 #include "string.h"

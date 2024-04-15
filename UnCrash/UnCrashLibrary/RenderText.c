@@ -107,16 +107,16 @@ void SetScreenText(uint16_t Score, PLT24Ctx_t lt24) {
 	Style.Colour = 0xFD00;
 	RenderText(NumScore, strlen(NumScore), &Style, lt24);
 
-	char TextKeyPress[] = "PRESS KEY2 TO";
+	char TextKeyPress[] = "PRESS KEY1 TO";
 	Style.PosY = Style.PosY + FONT_HEIGHT* Style.Scale + 20;
-	Style.PosX = 23;
+	Style.PosX = 24;
 	Style.Scale = 3;
 	Style.Colour = 0x3667;
 	RenderText(TextKeyPress, strlen(TextKeyPress), &Style, lt24);
 
-	char TextKeyNum[] = "2";
+	char TextKeyNum[] = "1";
 	Style.PosX = 23 + 46*Style.Scale;
-	Style.Colour = 0xFFFF;
+	Style.Colour =  0xFFE0;
 	RenderText(TextKeyNum, strlen(TextKeyNum), &Style, lt24);
 
 	char TextRestart[] = "RESTART";
