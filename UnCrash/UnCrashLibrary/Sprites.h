@@ -19,6 +19,9 @@ typedef struct WorldBlock {
 	uint16_t OffsetY;		// The y-axis point on LCD to draw from
 } WorldBlock;
 
+// Colour of road
+#define ROAD_COLOUR 0x32D0
+
 // Sidewalk Dimensions
 #define SW_WIDTH 24u
 #define SW_HEIGHT 320u
