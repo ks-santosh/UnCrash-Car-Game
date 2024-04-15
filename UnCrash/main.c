@@ -25,10 +25,12 @@
 #include "UnCrashLibrary/PlayAudio.h"
 #include "UnCrashLibrary/RenderText.h"
 
+
+// Sets the speed of playing game in timer value
+#define SP_GAME 10000000
+
 void exitOnFail(signed int status, signed int successStatus){
-    static unsigned int taski = 0;
-	if (status != successStatus) {
-		taski++;
+ 	if (status != successStatus) {
         exit((int)status); //Add breakpoint here to catch failure
     }
 }
@@ -112,7 +114,7 @@ int main(void) {
 			CurrentTimerValue = *private_timer_value;
 
 			// The time controls the speed of the game
-			if((TaskTimerValue - CurrentTimerValue) >= SP_TASK) {
+			if((TaskTimerValue - CurrentTimerValue) >= SP_GAME) {
 
 				TaskTimerValue = *private_timer_value;
 
