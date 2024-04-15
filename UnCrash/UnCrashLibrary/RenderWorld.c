@@ -172,7 +172,6 @@ void RenderWorldBlock(WorldBlock *Block, PLT24Ctx_t lt24) {
 		LT24_copyFrameBuffer(lt24,SetBlock, ObsX, BlOffsetY, OB_SIDE, BlHeight);
 	}
 	else {
-		SetBlock = &Road[StartPx];
 		LT24_drawColourWindow(lt24,ROAD_COLOUR, ObsX, BlOffsetY, OB_SIDE, BlHeight);
 	}
 
@@ -340,40 +339,45 @@ void RenderGrayScreen(WorldBlock WBlocks[], PLT24Ctx_t lt24) {
 		const unsigned short *SetBlock;
 		if(ObsPlaceType & 1u) {
 			SetBlock = &Obstacles[*ObsType][StartPx];
+			LT24_copyGrayFrameBuffer(lt24, SetBlock, ObsX, BlOffsetY, OB_SIDE, BlHeight);
 		}
 		else if (CoinPlaceType & 1u){
 			SetBlock = &Coin[StartPx];
+			LT24_copyGrayFrameBuffer(lt24, SetBlock, ObsX, BlOffsetY, OB_SIDE, BlHeight);
 		}
 		else {
-			SetBlock = &Road[StartPx];
+			LT24_drawColourWindow(lt24, ROAD_COLOUR, ObsX, BlOffsetY, OB_SIDE, BlHeight);
 		}
-		LT24_copyGrayFrameBuffer(lt24, SetBlock, ObsX, BlOffsetY, OB_SIDE, BlHeight);
 
 		// middle block : bit 1
 		ObsX += OB_SIDE;
 		if((ObsPlaceType >> 1) & 1u) {
 			SetBlock = &Obstacles[*ObsType++][StartPx];
+			LT24_copyGrayFrameBuffer(lt24,SetBlock, ObsX, BlOffsetY, OB_SIDE, BlHeight);
 		}
 		else if ((CoinPlaceType >> 1) & 1u){
 			SetBlock = &Coin[StartPx];
+			LT24_copyGrayFrameBuffer(lt24,SetBlock, ObsX, BlOffsetY, OB_SIDE, BlHeight);
 		}
 		else {
-			SetBlock = &Road[StartPx];
+			LT24_drawColourWindow(lt24,ROAD_COLOUR, ObsX, BlOffsetY, OB_SIDE, BlHeight);
+
 		}
-		LT24_copyGrayFrameBuffer(lt24,SetBlock, ObsX, BlOffsetY, OB_SIDE, BlHeight);
 
 		// end block : bit 2
 		ObsX += OB_SIDE;
 		if((ObsPlaceType >> 2) & 1u) {
 			SetBlock = &Obstacles[*ObsType++][StartPx];
+			LT24_copyGrayFrameBuffer(lt24,SetBlock, ObsX, BlOffsetY, OB_SIDE, BlHeight);
 		}
 		else if ((CoinPlaceType >> 2) & 1u){
 			SetBlock = &Coin[StartPx];
+			LT24_copyGrayFrameBuffer(lt24,SetBlock, ObsX, BlOffsetY, OB_SIDE, BlHeight);
 		}
 		else {
-			SetBlock = &Road[StartPx];
+			LT24_drawColourWindow(lt24,ROAD_COLOUR, ObsX, BlOffsetY, OB_SIDE, BlHeight);
 		}
-		LT24_copyGrayFrameBuffer(lt24,SetBlock, ObsX, BlOffsetY, OB_SIDE, BlHeight);
+
 	}
 
 	LT24_copyGrayFrameBuffer(lt24, SidewalkLeft, 0, 0, SW_WIDTH, LT24_HEIGHT);
