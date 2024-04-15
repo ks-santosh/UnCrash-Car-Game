@@ -6,7 +6,17 @@
 #include "Sprites.h"
 #include "DE1SoC_LT24/DE1SoC_LT24.h"
 
+//
+// Copy frame buffer to display after converting it to grayscale image
+// - returns 0 if successful
+//
+HpsErr_t LT24_copyGrayFrameBuffer( PLT24Ctx_t ctx, const unsigned short* framebuffer, unsigned int xleft, unsigned int ytop, unsigned int width, unsigned int height );
 
+//
+// Function to set single colour to a part of the display
+// - returns true if successful
+//
+HpsErr_t LT24_drawColourWindow( PLT24Ctx_t ctx, unsigned short Colour, unsigned int xleft, unsigned int ytop, unsigned int width, unsigned int height );
 
 //
 // Generates random number using Linear-Feedback Shift Register
@@ -17,6 +27,7 @@ uint16_t GetRandomNumber();
 //
 //	Creates game world blocks to be rendered
 //	- no returns as the value is directly written to address
+//
 void SetWorldBlock(WorldBlock *Block);
 
 //
