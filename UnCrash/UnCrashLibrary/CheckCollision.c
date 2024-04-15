@@ -68,7 +68,7 @@ void SetCollisionAction(WorldBlock WBlocks[], uint16_t Px, uint16_t Py, Collisio
 	}
 
 	// A point of car is not on road
-	if(Pixel != 0x32D0) {
+	if(Pixel != ROAD_COLOUR) {
 		if(CollType) {
 			CollSts->Crash = true;
 		}
@@ -96,28 +96,28 @@ void CheckCollision(WorldBlock WBlocks[], uint16_t CarPosX, CollisionEvent *Coll
 	static uint16_t PrvScore = 0; // previous score
 
 	// check car's top-left corner
-	SetCollisionAction(WBlocks, CarPosX, CAR_POS_Y, CollSts);
+	SetCollisionAction(WBlocks, CarPosX+2, CAR_POS_Y+2, CollSts);
 	if((CollSts->Crash) || (PrvScore != CollSts->Score)) {
 		PrvScore = CollSts->Score;
 		return;
 	}
 
 	// check car's bottom-right corner
-	SetCollisionAction(WBlocks, CarPosX + CAR_WIDTH - 1, CAR_POS_Y + CAR_HEIGHT - 1,CollSts);
+	SetCollisionAction(WBlocks, CarPosX + CAR_WIDTH - 3, CAR_POS_Y + CAR_HEIGHT - 3,CollSts);
 	if((CollSts->Crash) || (PrvScore != CollSts->Score)) {
 		PrvScore = CollSts->Score;
 		return;
 	}
 
 	// check car's top-right corner
-	SetCollisionAction(WBlocks, CarPosX + CAR_WIDTH - 1, CAR_POS_Y,CollSts);
+	SetCollisionAction(WBlocks, CarPosX + CAR_WIDTH - 3, CAR_POS_Y + 2,CollSts);
 	if((CollSts->Crash) || (PrvScore != CollSts->Score)) {
 		PrvScore = CollSts->Score;
 		return;
 	}
 
 	// check car's bottom-left corner
-	SetCollisionAction(WBlocks, CarPosX, CAR_POS_Y + CAR_HEIGHT - 1,CollSts);
+	SetCollisionAction(WBlocks, CarPosX + 2, CAR_POS_Y + CAR_HEIGHT - 3,CollSts);
 	if((CollSts->Crash) || (PrvScore != CollSts->Score)) {
 		PrvScore = CollSts->Score;
 		return;
