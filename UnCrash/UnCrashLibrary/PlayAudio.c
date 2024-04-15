@@ -66,13 +66,19 @@ void PlayCoinSound(PWM8731Ctx_t audio) {
 //
 void PlayMusic(PWM8731Ctx_t audio) {
 
+	volatile unsigned int *private_timer_value = (unsigned int *)(LSC_BASE_PRIV_TIM + 0x4);
+	volatile unsigned int *private_timer_interrupt = (unsigned int *)(LSC_BASE_PRIV_TIM + 0xC);
+
+	uint32_t TaskTimerValue = *private_timer_value;
+	uint32_t CurrentTimerValue = *private_timer_value;
+
 	// To store space of FIFO channels
 	uint32_t FifoSpace;
 
 	uint32_t MusicSize = sizeof(MusicLoop)/sizeof(MusicLoop[0]);
 
 	for(int32_t i = 0; i < MusicSize; i++) {
-
+		TaskTimerValue = *private_timer_value;
 		//Always check the FIFO Space before writing to the left/right channel pointers
 		WM8731_getFIFOSpace(audio, &FifoSpace);
 
@@ -82,8 +88,12 @@ void PlayMusic(PWM8731Ctx_t audio) {
 			WM8731_writeSample(audio, MusicLoop[i], MusicLoop[i]);
 		}
 
-		// To create delay between every sample
-		for(int8_t d=10; d>0;d--);
+		// Create blocking delay
+		CurrentTimerValue = *private_timer_value;
+		while((TaskTimerValue - CurrentTimerValue) < SP_MUSIC) {
+			CurrentTimerValue = *private_timer_value;
+		}
+
 	}
 
 }

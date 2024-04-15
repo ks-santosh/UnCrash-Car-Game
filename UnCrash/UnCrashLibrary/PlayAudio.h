@@ -13,17 +13,18 @@
 #include <stdbool.h>
 
 // Libraries to set up audio drivers
+#include "DE1SoC_Addresses/DE1SoC_Addresses.h"
 #include "DE1SoC_WM8731/DE1SoC_WM8731.h"
 #include "HPS_GPIO/HPS_GPIO.h"
 #include "HPS_I2C/HPS_I2C.h"
 #include "FPGA_PIO/FPGA_PIO.h"
 #include "Util/macros.h"
+#include <math.h>			// Include Floating Point Math Libraries
+#include "Sounds.h"			// Contains music
 
-//Include Floating Point Math Libraries
-#include <math.h>
 
-// Contains music
-#include "Sounds.h"
+// Sets the speed of playing music samples in timer value
+#define SP_MUSIC 1200
 
 //
 // Plays two tones one after another
