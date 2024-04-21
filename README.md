@@ -1,3 +1,4 @@
-# ELEC5620M Mini-Project Repository
+# ELEC5620M Mini-Project - UnCrash
 
-This is the blank repository in which you must incrementally commit your code.
+UnCrash is a game in which you have to control a car using the keys. The challenge is to avoid the obstacles and collect coins to gain points. The score will be displayed on the seven-segment displays.
+The game will end if car crashes with any obstacles or scores 9999. Further instructions are shown in the game start screen.
