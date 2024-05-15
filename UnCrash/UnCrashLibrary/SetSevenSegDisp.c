@@ -1,38 +1,51 @@
 /*
  * File: SetSevenSegDisp.c
  *
- * Details : Displays the decimal number on four seven segment displays
+ * Details: Shows the decimal number on the first four seven-segment
+ * displays and a smiley face on the last two displays.
+ *
+ * Author: Yuehan You
  *
  */
 
+// Header inclusion
 #include "SetSevenSegDisp.h"
-// The base addresses of the seven segment display peripherals.
+
+// The base addresses of the seven-segment display peripherals.
 volatile unsigned char *SevenSegPtrLow = (unsigned char*) 0xFF200020;
 volatile unsigned char *SevenSegPtrHigh = (unsigned char*) 0xFF200030;
 
 //
-// Initialises seven-segment displays with default values
+// Function: InitialiseSevenSeg
+// Default: Initialises seven-segment displays with default values.
+// Arguments: Void.
+// Return: Void.
 //
 void InitialiseSevenSeg() {
 
-	SevenSegPtrLow[0] = 0x3F;
-	SevenSegPtrLow[1] = 0x3F;
-	SevenSegPtrLow[2] = 0x3F;
-	SevenSegPtrLow[3] = 0x3F;
+	// Display 0000 on first four displays
+	SevenSegPtrLow[0] = 0x3F; // HEX0
+	SevenSegPtrLow[1] = 0x3F; // HEX1
+	SevenSegPtrLow[2] = 0x3F; // HEX2
+	SevenSegPtrLow[3] = 0x3F; // HEX3
 
-	SevenSegPtrHigh[0] = 0x2C;
-
-	SevenSegPtrHigh[1] = 0x1A;
+	// Display smiley face |_''_| on last two displays
+	SevenSegPtrHigh[0] = 0x2C; // HEX4
+	SevenSegPtrHigh[1] = 0x1A; // HEX5
 
 }
 
 //
-// Displays a digit on a particular seven-segment display
+// Function: SetSingleSevenSeg
+// Details: Displays a digit on a particular seven-segment display
+// Arguments: Seven-segment HEX number, single digit number to display
+// Return: Void.
 //
 void SetSingleSevenSeg(uint8_t Disp, uint8_t Num) {
 
 	// Mapping number to seven-segment display bits
 	unsigned char SegBits = 0x00;
+
 	switch(Num)
 	{
 		case 0x00: SegBits = 0x3F; break;
@@ -59,11 +72,14 @@ void SetSingleSevenSeg(uint8_t Disp, uint8_t Num) {
 }
 
 //
-// Displays a four digit number on seven-segment display
+// Function: SetSevenSegDisp
+// Details: Displays a four digit number on first four seven-segment display
+// Arguments: Four digit number to display
+// Return: Void.
 //
 void SetSevenSegDisp(uint16_t Num) {
 
-	// set to any value above 0x0F to display - by default
+	// To store each of the four digits in the number
 	uint8_t Disp0, Disp1, Disp2, Disp3;
 
 	// Digit at units place
