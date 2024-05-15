@@ -1,14 +1,21 @@
 /*
  * File: PlayAudio.c
  *
- * Details : Plays sound on WM8731 chip when a game event occurs.
+ * Details: Triggers sound playback on the WM8731
+ * chip in response to game events.
+ *
+ * Author: Nikhilesh Bhaskar
  *
  */
 
+// Header inclusion
 #include "PlayAudio.h"
 
 //
-// Plays two tones one after another
+// Function: PlayCoinSound
+// Details: Plays two tones one after another
+// Arguments: Audio driver context
+// Return: Void.
 //
 void PlayCoinSound(PWM8731Ctx_t audio) {
 
@@ -22,27 +29,27 @@ void PlayCoinSound(PWM8731Ctx_t audio) {
 	unsigned int sampleRate;
 	WM8731_getSampleRate(audio, &sampleRate);
 
-	//Initialise Phase Accumulator
+	// Initialise Phase Accumulator
 	double phase  = 0.0;  							// Phase accumulator
-	double inc1   = 988.0 * M_2PI / sampleRate;   	// Phase increment 1
-	double inc2   = 1319.0 * M_2PI / sampleRate;	// Phase increment 2
+	double inc1   = 988.0 * M_2PI / sampleRate;   	// Phase increment 1 for Tone 1
+	double inc2   = 1319.0 * M_2PI / sampleRate;	// Phase increment 2 for Tone 2
 	double ampl   = 8388608.0;						// Tone amplitude (i.e. volume)
 	int32_t audio_sample = 0;
 
 	for(int32_t i = Duration; i > 0; i--) {
 
-		//Always check the FIFO Space before writing to the left/right channel pointers
+		// Always check the FIFO Space before writing to the left/right channel pointers
 		WM8731_getFIFOSpace(audio, &FifoSpace);
 
-		//If there is space in the write FIFO for both channels:
+		// If there is space in the write FIFO for both channels:
 		if (FifoSpace > 0) {
 
-			//Increment the phase
+			// Increment the phase
 			if(i > Duration/2) {
-				phase = phase + inc1;
+				phase = phase + inc1; // Phase increment for later half of the duration
 			}
 			else {
-				phase = phase + inc2;
+				phase = phase + inc2; // Phase increment for initial half of the duration
 			}
 
 			//Ensure phase is wrapped to range 0 to 2Pi (range of sin function)
@@ -62,35 +69,51 @@ void PlayCoinSound(PWM8731Ctx_t audio) {
 }
 
 //
-// Plays music
+// Function: PlayMusic
+// Details: Plays music from the audio file encoded
+// in unsigned 32 bit integer
+// Arguments: Audio driver context
+// Return: Void.
 //
 void PlayMusic(PWM8731Ctx_t audio) {
 
+	// Initialise the ARM A9 Private Timer
 	volatile unsigned int *private_timer_value = (unsigned int *)(LSC_BASE_PRIV_TIM + 0x4);
 	volatile unsigned int *private_timer_interrupt = (unsigned int *)(LSC_BASE_PRIV_TIM + 0xC);
 
+	// Initialise timer values for audio playing speed control
 	uint32_t TaskTimerValue = *private_timer_value;
 	uint32_t CurrentTimerValue = *private_timer_value;
 
 	// To store space of FIFO channels
 	uint32_t FifoSpace;
 
+	// Size of audio array
 	uint32_t MusicSize = sizeof(MusicLoop)/sizeof(MusicLoop[0]);
 
 	for(int32_t i = 0; i < MusicSize; i++) {
+
+		// Timer value at the start of each iteration
 		TaskTimerValue = *private_timer_value;
+
 		//Always check the FIFO Space before writing to the left/right channel pointers
 		WM8731_getFIFOSpace(audio, &FifoSpace);
 
 		//If there is space in the write FIFO for both channels:
 		if (FifoSpace > 0) {
+
 			// Output tone to left and right channels.
 			WM8731_writeSample(audio, MusicLoop[i], MusicLoop[i]);
 		}
 
-		// Create blocking delay
+		// Current timer value
 		CurrentTimerValue = *private_timer_value;
+
+		// Loop until delay time is elapsed to create a blocking
+		// delay. This will control the audio playback speed.
 		while((TaskTimerValue - CurrentTimerValue) < SP_MUSIC) {
+
+			// Current timer value
 			CurrentTimerValue = *private_timer_value;
 		}
 
