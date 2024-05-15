@@ -44,7 +44,7 @@ void PlayCoinSound(PWM8731Ctx_t audio);
 //
 // Function: PlayMusic
 // Details: Plays music from the audio file encoded
-// in unsigned 32 bit integer
+// in signed 32 bit integer
 // Arguments: Audio driver context
 // Return: Void.
 //
