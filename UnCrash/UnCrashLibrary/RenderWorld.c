@@ -44,6 +44,8 @@ HpsErr_t LT24_copyGrayFrameBuffer( PLT24Ctx_t ctx, const unsigned short* framebu
 
 		// Convert RGB565 to gray colour using luminance method
 		// The coefficients of the RGB represent intensity of each color in gray
+		// Source code from: https://stackoverflow.com/questions/58449462/rgb565-to-grayscale
+
 		grayscale = (0.2126 * red) + (0.7152 * green / 2.0) + (0.0722 * blue);
 
 		// Join the components back into 565
@@ -101,6 +103,7 @@ uint16_t GetRandomNumber() {
 	uint16_t feedback;
 
 	// taps: 16 15 feedback polynomial: x^16 + x^15 + 1
+	// Source code from: https://en.wikipedia.org/wiki/Linear-feedback_shift_register
 	feedback = ((RandNum >> 0) ^ (RandNum >> 1)) & 1u;
 
 	// Get random number
