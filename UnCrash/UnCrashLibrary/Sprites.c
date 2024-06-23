@@ -1,10 +1,12 @@
 /*
- * Sprites.c
+ * File: Sprites.c
  *
- * Sprites pixel values array used in the game
+ * Details: RGB565 pixel value array of sprites used in the game.
+ * Comprises of sidewalk, obstacles, coins, car and other images.
+ *
  */
 
-// starting screen in game 320 x 240
+// Starting screen in game 320 x 240
 const unsigned short GameStartScreen[76800] = {
 0x148A, 0x35E9, 0x3E29, 0x3609, 0x3E29, 0x2DC9, 0x14C9, 0x4CF0, 0x9DF7, 0xA5D7, 0x6C94, 0x74F4, 0xA617, 0xA617, 0x9E17, 0x9DF7,   // 0x0010 (16) pixels
 0x9E17, 0x9E17, 0xA617, 0xA617, 0x8D76, 0x5C53, 0x8D96, 0x74D4, 0x32D0, 0x32B0, 0x32D0, 0x32D0, 0x32D0, 0x32D0, 0x32D0, 0x32D0,   // 0x0020 (32) pixels
