@@ -1,14 +1,19 @@
 /*
- * Sprites.h
+ * File: Sprites.h
  *
- * Sprites used in the game
+ * Details: RGB565 pixel value array of sprites used in the game.
+ * Comprises of sidewalk, obstacles, coins, car and other images.
+ * Has world block definitions and image dimensions.
+ *
  */
 
+// Include guards to prevent multiple header inclusions
 #ifndef SPRITES_H_
 #define SPRITES_H_
 
 //
-// Sets the design and placement of game world's basic blocks
+// Structure: WorldBlock
+// Details: Sets the design and placement of game world's blocks
 //
 typedef struct WorldBlock {
 	uint8_t ObsPlaceType;	// Obstacle placement type
@@ -21,6 +26,7 @@ typedef struct WorldBlock {
 
 // Colour of road
 #define ROAD_COLOUR 0x32D0
+#define GRAY_ROAD_COLOUR 0x528A
 
 // Sidewalk Dimensions
 #define SW_WIDTH 24u
@@ -37,11 +43,14 @@ typedef struct WorldBlock {
 #define CAR_POS_Y  208u			// Car top left Y position is fixed
 #define CAR_INIT_POS_X 112u		// Car top left X position at the start
 
+// Game start screen with instructions
 extern const unsigned short GameStartScreen[76800];
 
-extern const unsigned short SidewalkLeft[1536];
-extern const unsigned short SidewalkRight[1536];
+// Sidewalk pixel array
+extern const unsigned short SidewalkLeft[1536]; // Left sidewalk
+extern const unsigned short SidewalkRight[1536]; // Right sidewalk
 
+// Obstacle blocks pixel array. There are 8 types of obstacles
 extern const unsigned short Obstacle1[4096];
 extern const unsigned short Obstacle2[4096];
 extern const unsigned short Obstacle3[4096];
@@ -51,11 +60,14 @@ extern const unsigned short Obstacle6[4096];
 extern const unsigned short Obstacle7[4096];
 extern const unsigned short Obstacle8[4096];
 
+// Array of obstacle array
 extern const unsigned short *const Obstacles[8];
 
-extern const unsigned short CarCrashed[512];
-extern const unsigned short Car[512];
+// Car pixel array
+extern const unsigned short CarCrashed[512]; // Crashed car pixel array
+extern const unsigned short Car[512]; // Car image pixel array
 
+// Coin block pixel array
 extern const unsigned short Coin[4096];
 
 #endif /* SPRITES_H_ */
